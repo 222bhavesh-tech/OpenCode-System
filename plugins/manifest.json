@@ -1,0 +1,24 @@
+{
+  "version": "1.0.0",
+  "created": "2026-09-03 17:23:42",
+  "opencode_version": "1.18.27",
+  "plugins": [
+    {
+      "name": "opencode-damage-control",
+      "version": "1.5.0",
+      "source": "npm",
+      "enabled": true,
+      "description": "Damage control plugin for OpenCode — prevents accidental destructive operations",
+      "cost": "FREE",
+      "installed": true
+    }
+  ],
+  "removed": [
+    {
+      "name": "opencode-orchestrator",
+      "version": "1.7.15",
+      "reason": "Removed — conflicts with 5-mode architecture by forcing build/plan to subagent mode",
+      "removed_date": "2026-09-03"
+    }
+  ]
+}

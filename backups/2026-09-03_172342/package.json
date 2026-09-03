@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@opencode-ai/plugin": "1.18.26",
+    "opencode-damage-control": "^1.5.0",
+    "opencode-orchestrator": "^1.7.15"
+  }
+}

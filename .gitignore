@@ -1,0 +1,59 @@
+# OpenCode-System — Secrets and sensitive files
+# Never commit these to version control
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# API keys and tokens
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks
+
+# OAuth tokens
+oauth_token*
+access_token*
+refresh_token*
+
+# Cookies
+cookies*
+*.cookies
+
+# Passwords
+passwords*
+*.password
+
+# Backup files with potential secrets
+backups/*/metadata.json
+
+# Node modules
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Cache
+.cache/
+*.cache
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp

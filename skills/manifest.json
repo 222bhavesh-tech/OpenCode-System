@@ -1,0 +1,837 @@
+{
+    "created":  "2026-09-03 17:25:17",
+    "version":  "1.0.0",
+    "opencode_version":  "1.18.27",
+    "skills":  [
+                   {
+                       "name":  "agent-behavior-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "agent-evaluation-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "agent-memory-workflow",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "agent-orchestration-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "agent-session-workflow",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "agent-squad-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "agent-task-workflow",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "ai-agents-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "ai-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "ai-ml-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "ai-research-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "ai-testing-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "andruia-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "api-design",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "api-documentation",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "api-integration-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "app-builder-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "architecture-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "automation-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "autonomous-agent-harness",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "autonomous-loops",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "backend-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "backend-patterns",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "blockchain-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "blog-workflow",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "browser-automation-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "building-accessible-interfaces",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "building-mcp-servers",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "business-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "business-strategy-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "ci-pipeline",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "clickhouse-io",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "cloud-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "code-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "code-quality-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "code-review",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "coding-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "coding-standards",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "collaboration-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "consulting-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "content-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "context-budget",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "context-engineering",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "context-optimization-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "continuous-agent-loop",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "continuous-learning",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "core-dev-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "cost-tracking",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "creative-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "data-ai-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "data-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "data-engineering-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "data-science-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "database-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "database-migrations",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "database-optimizer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "database-processing-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "databases-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "debugging-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "deep-research",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "deploy",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "deployment-patterns",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "design-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "design-it-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "designing-frontend-interfaces",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "designing-user-experience",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "developer-tools-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "development-and-testing-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "development-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "devops-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "docker-patterns",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "document-processing-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "document-verification-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "ecommerce-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "education-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "error-handling",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "finance-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "flutter-expert",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "framework-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "front-end-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "frontend-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "frontend-design",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "frontend-design-systems",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "frontend-patterns",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "fullstack-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "game-development-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "general-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "granular-workflow-bundle-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "graphics-processing-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "growth-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "health-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "impeccable",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "knowledge-management-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "legal-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "leiloeiro-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "marketing-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "mcp-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "media-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "media-processing-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "memory-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "memory-management",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "meta-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "ml-ops-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "mobile-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "monopoly-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "motion-foundations",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "motion-patterns",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "multi-agent-orchestration",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "nestjs-expert",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "nextjs-developer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "office-productivity-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "opencode-skill-creator",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "operations-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "orchestration-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "pentest-tools-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "performance-profile",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "personal-development-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "planning-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "postgres-patterns",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "postgres-pro",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "presentation-processing-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "product-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "product-management-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "productivity-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "project-management-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "prompt-engineering-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "python-pro",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "quality-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "react-expert",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "reasoning-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "redis-patterns",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "reliability-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "remotion-animation-rules",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "remotion-creative-storytelling",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "research-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "reverse-engineering-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "reviewing-interface-quality",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "reviewing-security",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "science-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "security-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "security-review",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "seo-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "skill-authoring-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "spreadsheet-processing-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "strategic-compact",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "structured-project-execution",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "super-code-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "superpowers",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "systematic-debugging",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "tdd-workflow",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "test-automation-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "testing-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "tool-quality-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "tools-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "travel-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "typescript-pro",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "uncategorized-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "vercel-react-best-practices",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "video-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "voice-agents-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "vue-expert",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "web-design-guidelines",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "web-development-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "workflow-bundle-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "workflow-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   },
+                   {
+                       "name":  "writing-category-pointer",
+                       "source":  "opencode-registry",
+                       "installed":  true
+                   }
+               ]
+}

@@ -1,0 +1,165 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  "instructions": ["AGENTS.md"],
+
+  "model": "opencode/mimo-v2-5-free",
+  "small_model": "opencode/mimo-v2-5-free",
+
+  "plugin": [
+    "opencode-damage-control"
+  ],
+
+  "agent": {
+    "workspace": {
+      "mode": "primary",
+      "model": "opencode/mimo-v2-5-free",
+      "description": "Interactive project discovery, capability selection, and environment analysis"
+    },
+    "commander": {
+      "mode": "primary",
+      "model": "opencode/mimo-v2-5-free",
+      "description": "Top-level mission orchestrator for decomposition, delegation, and coordination"
+    },
+    "plan": {
+      "mode": "primary",
+      "model": "opencode/mimo-v2-5-free",
+      "description": "Deep investigation, architecture analysis, research, and planning"
+    },
+    "build": {
+      "mode": "primary",
+      "model": "opencode/mimo-v2-5-free",
+      "description": "Implementation engine for source code, configuration, tests, and debugging"
+    },
+    "reviewer": {
+      "mode": "primary",
+      "model": "opencode/mimo-v2-5-free",
+      "description": "Independent verification for requirements, code review, security, and testing"
+    },
+    "general": {
+      "model": "opencode/mimo-v2-5-free",
+      "description": "General-purpose agent for complex tasks"
+    },
+    "explore": {
+      "model": "opencode/mimo-v2-5-free",
+      "description": "Fast exploration agent for codebase search and analysis"
+    },
+    "title": {
+      "model": "opencode/mimo-v2-5-free",
+      "description": "Lightweight agent for title generation"
+    },
+    "summary": {
+      "model": "opencode/mimo-v2-5-free",
+      "description": "Lightweight agent for summary generation"
+    }
+  },
+
+  "skills": {
+    "paths": [
+      "~/.config/opencode/skills"
+    ]
+  },
+
+  "mcp": {
+    "github": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "{env:GITHUB_PERSONAL_ACCESS_TOKEN}"
+      },
+      "enabled": true,
+      "description": "GitHub MCP — repository operations, code search, issues, PRs"
+    },
+    "filesystem": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-filesystem", "C:\\Users\\bhavesh jeengar\\Documents"],
+      "enabled": true,
+      "description": "Filesystem MCP — read/write local files"
+    },
+    "playwright": {
+      "type": "local",
+      "command": ["npx", "-y", "@playwright/mcp@latest"],
+      "enabled": true,
+      "description": "Playwright MCP — browser automation and testing"
+    },
+    "memory": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-memory"],
+      "enabled": true,
+      "description": "Memory MCP — persistent knowledge graph"
+    },
+    "context7": {
+      "type": "local",
+      "command": ["npx", "-y", "@upstash/context7-mcp"],
+      "enabled": true,
+      "description": "Context7 MCP — library/framework documentation lookup"
+    },
+    "chrome-devtools": {
+      "type": "local",
+      "command": ["npx", "-y", "chrome-devtools-mcp@latest"],
+      "enabled": true,
+      "description": "Chrome DevTools MCP — browser debugging and inspection"
+    },
+    "firecrawl": {
+      "type": "local",
+      "command": ["npx", "-y", "firecrawl-mcp"],
+      "env": {
+        "FIRECRAWL_API_KEY": "{env:FIRECRAWL_API_KEY}"
+      },
+      "enabled": true,
+      "description": "Firecrawl MCP — web scraping (keyless free: scrape/search/parse only)"
+    },
+    "chirpie": {
+      "type": "local",
+      "command": ["npx", "-y", "@chirpie/mcp"],
+      "enabled": true,
+      "description": "Chirpie MCP — social media posting to 14 platforms"
+    },
+    "figma": {
+      "type": "remote",
+      "url": "https://mcp.figma.com/mcp",
+      "enabled": false,
+      "oauth": true,
+      "description": "Figma MCP — DISABLED (requires Figma Dev/Full seat + OAuth). NOT FREE."
+    },
+    "google-flow": {
+      "type": "local",
+      "command": ["node", "C:\\Users\\bhavesh jeengar\\.config\\opencode\\google-flow-mcp\\dist\\index.js"],
+      "enabled": false,
+      "description": "Google Flow MCP — DISABLED (requires Chrome CDP + real Google email). NOT FREE."
+    },
+    "computer-use": {
+      "type": "local",
+      "command": ["npx", "-y", "open-computer-use", "mcp"],
+      "enabled": false,
+      "description": "Computer Use MCP — DISABLED (requires Docker). NOT FREE."
+    }
+  },
+
+  "permission": {
+    "skill": {
+      "*": "allow"
+    },
+    "edit": "allow",
+    "bash": {
+      "git *": "allow",
+      "npm *": "allow",
+      "npx *": "allow",
+      "node *": "allow",
+      "python *": "allow",
+      "pip *": "allow",
+      "pytest *": "allow",
+      "cargo *": "allow",
+      "go *": "allow",
+      "docker *": "allow",
+      "docker-compose *": "allow",
+      "mkdir *": "allow",
+      "ls *": "allow",
+      "cat *": "allow",
+      "find *": "allow",
+      "grep *": "allow",
+      "curl *": "allow",
+      "*": "ask"
+    }
+  }
+}

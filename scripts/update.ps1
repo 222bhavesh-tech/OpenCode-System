@@ -135,13 +135,44 @@ if (-not $DryRun) {
         Write-Host "  Agents restored" -ForegroundColor Green
     }
     
-    # Restore config
+    # Restore config — Rule 25/26: Preserve model/provider settings
     $sourceConfig = "$SourceOfTruth\config\opencode.jsonc"
     $destConfig = "$OpenCodeConfig\opencode.jsonc"
     
     if (Test-Path $sourceConfig) {
-        Copy-Item -Path $sourceConfig -Destination $destConfig -Force
-        Write-Host "  Configuration restored" -ForegroundColor Green
+        if (Test-Path $destConfig) {
+            # Read current model settings before overwriting
+            $currentConfig = Get-Content $destConfig -Raw | ConvertFrom-Json
+            $currentModel = $currentConfig.model
+            $currentSmallModel = $currentConfig.small_model
+            
+            # Read source config
+            $sourceConfigContent = Get-Content $sourceConfig -Raw | ConvertFrom-Json
+            
+            # Remove hard-coded models from source (Rule 19)
+            if ($sourceConfigContent.model) {
+                $sourceConfigContent.PSObject.Properties.Remove('model')
+            }
+            if ($sourceConfigContent.small_model) {
+                $sourceConfigContent.PSObject.Properties.Remove('small_model')
+            }
+            
+            # Merge: keep current model settings, restore everything else
+            $mergedConfig = $sourceConfigContent
+            if ($currentModel) {
+                $mergedConfig | Add-Member -NotePropertyName "model" -NotePropertyValue $currentModel -Force
+            }
+            if ($currentSmallModel) {
+                $mergedConfig | Add-Member -NotePropertyName "small_model" -NotePropertyValue $currentSmallModel -Force
+            }
+            
+            $mergedConfig | ConvertTo-Json -Depth 10 | Set-Content -Path $destConfig -Force
+            Write-Host "  Configuration restored (model preserved: $currentModel)" -ForegroundColor Green
+        } else {
+            # No existing config — install fresh (no model to preserve)
+            Copy-Item -Path $sourceConfig -Destination $destConfig -Force
+            Write-Host "  Configuration installed" -ForegroundColor Green
+        }
     }
 } else {
     Write-Host "  [DRY RUN] No changes applied" -ForegroundColor Gray

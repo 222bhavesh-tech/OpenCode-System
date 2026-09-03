@@ -92,14 +92,38 @@ if (Test-Path $sourceConfig) {
         }
         $repairCount++
     } else {
-        $sourceHash = (Get-FileHash $sourceConfig -Algorithm MD5).Hash
-        $destHash = (Get-FileHash $destConfig -Algorithm MD5).Hash
+        # Rule 26: Preserve current model/provider settings
+        $currentConfig = Get-Content $destConfig -Raw | ConvertFrom-Json
+        $currentModel = $currentConfig.model
+        $currentSmallModel = $currentConfig.small_model
         
-        if ($sourceHash -ne $destHash) {
-            Write-Host "  [CHANGED] opencode.jsonc — content differs" -ForegroundColor Yellow
+        # Check for hard-coded models in source (should not exist per Rule 19)
+        $sourceConfigContent = Get-Content $sourceConfig -Raw | ConvertFrom-Json
+        $sourceHasModel = $false
+        if ($sourceConfigContent.model) {
+            Write-Host "  [WARN] Source config has hard-coded model (Rule 19 violation)" -ForegroundColor Yellow
+            $sourceHasModel = $true
+        }
+        
+        # Restore agents, MCPs, skills, plugins but preserve model settings
+        $sourceConfigContent.agent = $currentConfig.agent
+        $sourceConfigContent.mcp = $currentConfig.mcp
+        $sourceConfigContent.skills = $currentConfig.skills
+        $sourceConfigContent.permission = $currentConfig.permission
+        
+        # Only restore if agents/MCPs differ
+        $agentsDiffer = ($currentConfig.agent | ConvertTo-Json) -ne ($sourceConfigContent.agent | ConvertTo-Json)
+        $mcpDiffer = ($currentConfig.mcp | ConvertTo-Json) -ne ($sourceConfigContent.mcp | ConvertTo-Json)
+        
+        if ($agentsDiffer -or $mcpDiffer) {
+            Write-Host "  [CHANGED] opencode.jsonc — agents/MCPs differ" -ForegroundColor Yellow
             if (-not $DryRun) {
-                Copy-Item -Path $sourceConfig -Destination $destConfig -Force
-                Write-Host "  [FIXED] opencode.jsonc restored from source" -ForegroundColor Green
+                # Merge: keep model settings, restore everything else
+                $mergedConfig = $currentConfig
+                $mergedConfig.agent = $sourceConfigContent.agent
+                $mergedConfig.mcp = $sourceConfigContent.mcp
+                $mergedConfig | ConvertTo-Json -Depth 10 | Set-Content -Path $destConfig -Force
+                Write-Host "  [FIXED] opencode.jsonc merged (model preserved)" -ForegroundColor Green
             }
             $repairCount++
         } else {

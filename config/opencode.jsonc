@@ -3,9 +3,6 @@
 
   "instructions": ["AGENTS.md"],
 
-  "model": "opencode/mimo-v2-5-free",
-  "small_model": "opencode/mimo-v2-5-free",
-
   "plugin": [
     "opencode-damage-control"
   ],
@@ -13,43 +10,34 @@
   "agent": {
     "workspace": {
       "mode": "primary",
-      "model": "opencode/mimo-v2-5-free",
       "description": "Interactive project discovery, capability selection, and environment analysis"
     },
     "commander": {
       "mode": "primary",
-      "model": "opencode/mimo-v2-5-free",
       "description": "Top-level mission orchestrator for decomposition, delegation, and coordination"
     },
     "plan": {
       "mode": "primary",
-      "model": "opencode/mimo-v2-5-free",
       "description": "Deep investigation, architecture analysis, research, and planning"
     },
     "build": {
       "mode": "primary",
-      "model": "opencode/mimo-v2-5-free",
       "description": "Implementation engine for source code, configuration, tests, and debugging"
     },
     "reviewer": {
       "mode": "primary",
-      "model": "opencode/mimo-v2-5-free",
       "description": "Independent verification for requirements, code review, security, and testing"
     },
     "general": {
-      "model": "opencode/mimo-v2-5-free",
       "description": "General-purpose agent for complex tasks"
     },
     "explore": {
-      "model": "opencode/mimo-v2-5-free",
       "description": "Fast exploration agent for codebase search and analysis"
     },
     "title": {
-      "model": "opencode/mimo-v2-5-free",
       "description": "Lightweight agent for title generation"
     },
     "summary": {
-      "model": "opencode/mimo-v2-5-free",
       "description": "Lightweight agent for summary generation"
     }
   },

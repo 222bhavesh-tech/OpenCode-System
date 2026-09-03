@@ -65,17 +65,26 @@ Write-Host ""
 # Five Primary Agents
 Write-Host "Five Primary Agents:" -ForegroundColor Yellow
 $agents = @("workspace", "commander", "plan", "build", "reviewer")
+$configPath = "$OpenCodeConfig\opencode.jsonc"
+$configAgents = @()
+if (Test-Path $configPath) {
+    $config = Get-Content $configPath -Raw | ConvertFrom-Json
+    $configAgents = $config.agent.PSObject.Properties.Name
+}
+
 foreach ($agent in $agents) {
-    # Check in source of truth
+    # Check in source of truth (markdown file)
     $sourceExists = Test-Path "$SourceOfTruth\agents\$agent.md"
-    # Check in OpenCode config
+    # Check in OpenCode config directory (markdown file)
     $configExists = Test-Path "$OpenCodeConfig\agents\$agent.md"
+    # Check in opencode.jsonc config
+    $inConfig = $agent -in $configAgents
     
-    if ($sourceExists -and $configExists) {
+    if ($sourceExists -and ($configExists -or $inConfig)) {
         Write-Host "  [PASS] $agent (source + installed)" -ForegroundColor Green
         $passCount++
-    } elseif ($sourceExists) {
-        Write-Host "  [WARN] $agent (source only, not installed)" -ForegroundColor Yellow
+    } elseif ($sourceExists -or $inConfig) {
+        Write-Host "  [WARN] $agent (source only, not fully installed)" -ForegroundColor Yellow
         $warnCount++
     } elseif ($configExists) {
         Write-Host "  [WARN] $agent (installed only, not in source)" -ForegroundColor Yellow
@@ -108,6 +117,43 @@ if (Test-Path "$OpenCodeConfig\opencode.jsonc") {
     }
     
     Test-Component "All 5 modes defined in config" { $allPresent }
+}
+
+Write-Host ""
+
+# Model & Provider (Rule 27)
+Write-Host "Model & Provider:" -ForegroundColor Yellow
+Write-Host "  OpenCode Version: $(try { & opencode --version 2>&1 } catch { 'unknown' })" -ForegroundColor Gray
+
+if (Test-Path "$OpenCodeConfig\opencode.jsonc") {
+    $config = Get-Content "$OpenCodeConfig\opencode.jsonc" -Raw | ConvertFrom-Json
+    
+    # Check for hard-coded model (should NOT exist per Rule 19)
+    $hasHardcodedModel = $false
+    if ($config.model) {
+        Write-Host "  [WARN] Hard-coded model found at top level: $($config.model)" -ForegroundColor Yellow
+        Write-Host "         Rule 19: Must NOT hard-code models. Use OpenCode native selection." -ForegroundColor Yellow
+        $hasHardcodedModel = $true
+        $warnCount++
+    }
+    
+    # Check agent-level hard-coded models
+    foreach ($agentProp in $config.agent.PSObject.Properties) {
+        if ($agentProp.Value.model) {
+            Write-Host "  [WARN] Hard-coded model in agent '$($agentProp.Name)': $($agentProp.Value.model)" -ForegroundColor Yellow
+            $hasHardcodedModel = $true
+            $warnCount++
+        }
+    }
+    
+    if (-not $hasHardcodedModel) {
+        Write-Host "  [PASS] No hard-coded models (inherits OpenCode selection)" -ForegroundColor Green
+        $passCount++
+    }
+    
+    Write-Host "  Model Source: OpenCode native configuration" -ForegroundColor Gray
+} else {
+    Write-Host "  [WARN] Cannot read config for model verification" -ForegroundColor Yellow
 }
 
 Write-Host ""

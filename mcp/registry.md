@@ -57,8 +57,8 @@
 
 | Name | Package | Free Status | Install Method | Notes |
 |------|---------|-------------|----------------|-------|
-| dbmcp | `dbmcp` | FREE | Go binary | MySQL, PostgreSQL, SQLite, single binary |
-| mcp-multi-db | `mcp-multi-db` | FREE | `npx -y mcp-multi-db` | Multi-database, read-only default |
+| dbmcp | `dbmcp` | FREE ✅ | `curl -L https://dbmcp.haymon.ai/install.ps1 \| iex` | Single binary, MySQL/PostgreSQL/SQLite, PII redaction, write-prevention |
+| mcp-multi-db | `mcp-multi-db` | FREE | `npm install -g mcp-multi-db` | Multi-database, read-only default |
 | universal-db-mcp | `universal-db-mcp` | FREE | `pip install universal-db-mcp` | Python, PostgreSQL/SQLite/MySQL/DuckDB |
 
 ### SOCIAL CATEGORY

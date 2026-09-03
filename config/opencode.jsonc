@@ -145,6 +145,12 @@
       "command": ["npx", "-y", "@cmsmcp/shopify"],
       "enabled": true,
       "description": "Shopify store management — products, orders, customers, inventory. 147 tools."
+    },
+    "dbmcp": {
+      "type": "local",
+      "command": ["dbmcp", "stdio", "--db-backend", "sqlite", "--db-name", ":memory:"],
+      "enabled": true,
+      "description": "Database MCP — MySQL, PostgreSQL, SQLite support. Configure DB_BACKEND, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME env vars for your database."
     }
   },
 

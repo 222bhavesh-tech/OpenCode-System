@@ -1,5 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
+
   "mcp": {
     "github": {
       "type": "local",
@@ -7,50 +8,45 @@
       "env": {
         "GITHUB_PERSONAL_ACCESS_TOKEN": "{env:GITHUB_PERSONAL_ACCESS_TOKEN}"
       },
-      "enabled": true,
-      "description": "GitHub MCP — repository operations, code search, issues, PRs",
-      "cost": "FREE",
-      "source": "https://github.com/modelcontextprotocol/servers"
+      "enabled": true
     },
     "filesystem": {
       "type": "local",
       "command": ["npx", "-y", "@modelcontextprotocol/server-filesystem", "C:\\Users\\bhavesh jeengar\\Documents"],
-      "enabled": true,
-      "description": "Filesystem MCP — read/write local files",
-      "cost": "FREE",
-      "source": "https://github.com/modelcontextprotocol/servers"
+      "enabled": true
     },
     "playwright": {
       "type": "local",
       "command": ["npx", "-y", "@playwright/mcp@latest"],
-      "enabled": true,
-      "description": "Playwright MCP — browser automation and testing",
-      "cost": "FREE",
-      "source": "https://github.com/microsoft/playwright-mcp"
+      "enabled": true
     },
     "memory": {
       "type": "local",
       "command": ["npx", "-y", "@modelcontextprotocol/server-memory"],
-      "enabled": true,
-      "description": "Memory MCP — persistent knowledge graph",
-      "cost": "FREE",
-      "source": "https://github.com/modelcontextprotocol/servers"
+      "enabled": true
     },
     "context7": {
       "type": "local",
       "command": ["npx", "-y", "@upstash/context7-mcp"],
-      "enabled": true,
-      "description": "Context7 MCP — library/framework documentation lookup",
-      "cost": "FREE",
-      "source": "https://github.com/upstash/context7-mcp"
+      "enabled": true
     },
     "chrome-devtools": {
       "type": "local",
       "command": ["npx", "-y", "chrome-devtools-mcp@latest"],
-      "enabled": true,
-      "description": "Chrome DevTools MCP — browser debugging and inspection",
-      "cost": "FREE",
-      "source": "https://github.com/nicholasoxford/chrome-devtools-mcp"
+      "enabled": true
+    },
+    "figma": {
+      "type": "remote",
+      "url": "https://mcp.figma.com/mcp",
+      "enabled": false,
+      "oauth": true,
+      "description": "Figma design context — DISABLED (requires Figma Dev/Full seat + OAuth). NOT FREE."
+    },
+    "google-flow": {
+      "type": "local",
+      "command": ["node", "C:\\Users\\bhavesh jeengar\\.config\\opencode\\google-flow-mcp\\dist\\index.js"],
+      "enabled": false,
+      "description": "Google Flow MCP — DISABLED (requires Chrome CDP + real Google email). NOT FREE."
     },
     "firecrawl": {
       "type": "local",
@@ -59,42 +55,49 @@
         "FIRECRAWL_API_KEY": "{env:FIRECRAWL_API_KEY}"
       },
       "enabled": true,
-      "description": "Firecrawl MCP — web scraping (keyless free: scrape/search/parse only)",
-      "cost": "FREE (limited)",
-      "source": "https://github.com/mendableai/firecrawl-mcp"
-    },
-    "chirpie": {
-      "type": "local",
-      "command": ["npx", "-y", "@chirpie/mcp"],
-      "enabled": true,
-      "description": "Chirpie MCP — social media posting to 14 platforms",
-      "cost": "FREE",
-      "source": "https://github.com/chirpie-mcp/chirpie-mcp"
-    },
-    "figma": {
-      "type": "remote",
-      "url": "https://mcp.figma.com/mcp",
-      "enabled": false,
-      "oauth": true,
-      "description": "Figma MCP — DISABLED (requires Figma Dev/Full seat + OAuth). NOT FREE.",
-      "cost": "PAID",
-      "source": "https://github.com/figma/figma-mcp"
-    },
-    "google-flow": {
-      "type": "local",
-      "command": ["node", "C:\\Users\\bhavesh jeengar\\.config\\opencode\\google-flow-mcp\\dist\\index.js"],
-      "enabled": false,
-      "description": "Google Flow MCP — DISABLED (requires Chrome CDP + real Google email). NOT FREE.",
-      "cost": "PAID",
-      "source": "https://github.com/GoogleCloudPlatform/google-flow-mcp"
+      "description": "Web scraping (keyless free: scrape/search/parse). Crawl/map/agent require API key."
     },
     "computer-use": {
       "type": "local",
       "command": ["npx", "-y", "open-computer-use", "mcp"],
       "enabled": false,
-      "description": "Computer Use MCP — DISABLED (requires Docker). NOT FREE.",
-      "cost": "FREE (requires Docker)",
-      "source": "https://github.com/nicholasoxford/open-computer-use"
+      "description": "Desktop control — DISABLED (requires Docker). NOT FREE."
+    },
+    "chirpie": {
+      "type": "local",
+      "command": ["npx", "-y", "@chirpie/mcp"],
+      "enabled": true,
+      "description": "Social media posting to 14 platforms including Facebook, X, LinkedIn, Instagram, Telegram. Requires chirpie login."
+    },
+    "sequential-thinking": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "enabled": true,
+      "description": "Step-by-step reasoning and problem solving. Enhances agent reasoning quality."
+    },
+    "fetch": {
+      "type": "local",
+      "command": ["npx", "-y", "mcp-fetch-server"],
+      "enabled": true,
+      "description": "Fetch web content as HTML, Markdown, plain text, JSON, or YouTube transcripts."
+    },
+    "wordpress": {
+      "type": "local",
+      "command": ["npx", "-y", "@cmsmcp/wordpress"],
+      "enabled": true,
+      "description": "WordPress CMS management — posts, pages, media, users, comments. 337 tools."
+    },
+    "woocommerce": {
+      "type": "local",
+      "command": ["npx", "-y", "@cmsmcp/woocommerce"],
+      "enabled": true,
+      "description": "WooCommerce store management — products, orders, customers, coupons. 95 tools."
+    },
+    "shopify": {
+      "type": "local",
+      "command": ["npx", "-y", "@cmsmcp/shopify"],
+      "enabled": true,
+      "description": "Shopify store management — products, orders, customers, inventory. 147 tools."
     }
   }
 }

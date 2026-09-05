@@ -300,3 +300,75 @@ export class FailureStrategy {
     };
   }
 }
+
+
+/**
+ * Backoff Configuration
+ */
+export const BACKOFF_CONFIG = Object.freeze({
+  defaultStrategy: 'exponential',
+  defaultInitialMs: 1000,
+  defaultMaxMs: 30000,
+  defaultMaxRetries: 5,
+});
+
+/**
+ * Calculate backoff delay
+ * @param {number} attempt - Current attempt number (0-based)
+ * @param {object} config - Backoff configuration
+ * @returns {number} Delay in milliseconds
+ */
+export function calculateBackoff(attempt, config = {}) {
+  const {
+    strategy = BACKOFF_CONFIG.defaultStrategy,
+    initialMs = BACKOFF_CONFIG.defaultInitialMs,
+    maxMs = BACKOFF_CONFIG.defaultMaxMs,
+  } = config;
+
+  switch (strategy) {
+    case 'fixed':
+      return initialMs;
+    case 'linear':
+      return Math.min(initialMs * (attempt + 1), maxMs);
+    case 'exponential':
+    default:
+      return Math.min(initialMs * Math.pow(2, attempt), maxMs);
+  }
+}
+
+/**
+ * Sleep for specified milliseconds
+ */
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * Execute with retry and backoff
+ * @param {Function} fn - Function to execute
+ * @param {object} options - Retry options
+ * @returns {Promise<object>} Result
+ */
+export async function executeWithBackoff(fn, options = {}) {
+  const {
+    maxRetries = BACKOFF_CONFIG.defaultMaxRetries,
+    backoffConfig = {},
+    shouldRetry = () => true,
+    onRetry = null,
+  } = options;
+
+  let lastError = null;
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return { success: true, value: await fn(attempt), attempts: attempt + 1 };
+    } catch (error) {
+      lastError = error;
+      if (attempt < maxRetries && shouldRetry(error, attempt)) {
+        const delay = calculateBackoff(attempt, backoffConfig);
+        if (onRetry) onRetry(error, attempt, delay);
+        await sleep(delay);
+      }
+    }
+  }
+  return { success: false, error: lastError, attempts: maxRetries + 1 };
+}

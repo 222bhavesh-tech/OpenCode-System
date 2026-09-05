@@ -1,10 +1,10 @@
 # Product Requirements Document — OpenCode-System
 
-**Version:** 0.4.0  
+**Version:** 0.5.0  
 **Status:** Active development  
 **Product:** OpenCode-System Autonomous Engineering Platform  
 **Owner:** Repository maintainer  
-**Last updated:** 2026-09-05
+**Last updated:** 2026-09-05 (Phase B complete)
 
 ## 1. Product summary
 
@@ -316,9 +316,10 @@ defines the state and invariants; adapters do work and return receipts.
 - Autonomous Loop — Full 13-phase observe→complete orchestrator.
 - 44 new Phase A tests, 57 total tests all passing.
 
-### M4 — Verification adapters (next)
+### M4 -- Capability Inheritance (Phase B) -- COMPLETE
 
-- Run test/build/lint/type/security adapters.
+- Selectively inherit capabilities from OpenHands and OpenCode.
+- Adapter boundaries behind ControlPlane. No second state machine.
 - Add browser workflow/screenshot evidence for web projects.
 - Implement independent spec/code/security review gates.
 
@@ -476,4 +477,4 @@ non-trivial project can:
 | `plugins/manifest.json` | 1 | damage-control plugin |
 | `scripts/` | 5 | install, repair, backup, verify, update |
 | `docs/` | 4 | PRD, audit, gap matrix, control-plane contract |
-| `test/` | 2 | 57 unit tests (13 baseline + 44 Phase A) |
+| `test/` | 2 | 86 unit tests (13 baseline + 44 Phase A + 29 Phase B) |

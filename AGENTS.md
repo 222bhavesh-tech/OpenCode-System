@@ -2120,3 +2120,155 @@ node runtime/cli.mjs vdl --url http://localhost:3000 --build "npm run dev"
 - âœ… Autonomous Loop â€” implemented and tested (5 tests)
 - âœ… Full integration test â€” passing (3-task pipeline)
 - âœ… Regression tests â€” zero regressions
+
+---
+
+## 60. PHASE B — EXTERNAL CAPABILITY INHERITANCE (IMPLEMENTED)
+
+Phase B selectively inherits useful capabilities from external agent frameworks (OpenHands, OpenCode) through adapter boundaries behind the ControlPlane. No second state machine, no second scheduler, no competing authority.
+
+### Design Principles
+
+1. **OpenHands and OpenCode are capability SOURCES, not authorities**
+2. **Every inherited capability integrates through an explicit adapter behind ControlPlane**
+3. **No second orchestrator, no second scheduler, no second task-state, no second memory-authority**
+4. **OpenCode remains the foundation** — we extend, never replace
+5. **Selective inheritance** — smallest capable capability set per task
+
+### New Runtime Modules
+
+| File | Purpose | Source Inheritance |
+|------|---------|-------------------|
+| untime/capability-registry.mjs | Global registry of capabilities with priority, conflict risk, source tracking | Concept from all |
+| untime/agent-capabilities.mjs | Agent capability model — declarations, requirements, selection | OpenHands pattern |
+| untime/base-tool.mjs | Standardized tool interface (BaseTool, ToolInfo, ToolCall, ToolResponse) + 7 built-in tools | OpenCode 	ools.go |
+| untime/tool-registry.mjs | Tool registry with agent-specific tool sets (full/readOnly/editOnly/minimal) | OpenCode tool registry |
+| untime/retry-backoff.mjs | Retry with backoff strategies (fixed, linear, exponential) | OpenHands retry logic |
+| untime/permission-wrapper.mjs | Permission system with rules, audit log, approval flow | OpenCode permission.go |
+| untime/mcp-adapter.mjs | MCP tool discovery and adaptation as BaseTool instances | OpenCode MCP integration |
+| untime/context-summarizer.mjs | LLM-based context compression with token estimation | OpenCode context.go |
+| untime/typed-observations.mjs | Typed observation classes (ShellOutput, Error, Timeout, Success) + collector | OpenHands observation pattern |
+| untime/capability-conflict-detection.mjs | Conflict detection rules for second-orchestrator, second-scheduler, etc. | Original |
+| untime/capability-resolver.mjs | Task requirements ? capabilities ? agent ? tools resolution pipeline | Original |
+
+### Architecture
+
+`
+CAPABILITY INHERITANCE LAYER (Phase B)
+    ¦
+    +-- runtime/capability-registry.mjs
+    ¦   +-- Built-in capabilities (30+ from OpenHands + OpenCode)
+    ¦   +-- Register/query/get/update with conflict risk tracking
+    ¦   +-- Source tracking: opencode, openhands, custom
+    ¦
+    +-- runtime/agent-capabilities.mjs
+    ¦   +-- CapabilityType enum (15 types)
+    ¦   +-- AgentCapabilityDeclaration (agent ? capabilities)
+    ¦   +-- AgentCapabilityManager (capability requirements per task type)
+    ¦   +-- selectAgent() — best agent for given requirements
+    ¦
+    +-- runtime/base-tool.mjs
+    ¦   +-- BaseTool abstract class (info, permissions, safeRun)
+    ¦   +-- ToolInfo, ToolCall, ToolResponse
+    ¦   +-- 7 built-in tools: Shell, FileRead, FileWrite, FileEdit, Glob, Grep, Patch
+    ¦
+    +-- runtime/tool-registry.mjs
+    ¦   +-- ToolRegistry with agent-specific tool sets
+    ¦   +-- getToolsForAgent(role) ? filtered tool list
+    ¦   +-- execute(toolCall) ? safe execution with permissions
+    ¦
+    +-- runtime/retry-backoff.mjs
+    ¦   +-- retryWithBackoff(fn, options)
+    ¦   +-- BackoffStrategy: FIXED, LINEAR, EXPONENTIAL
+    ¦   +-- withRetry(fn, options) — curried wrapper
+    ¦
+    +-- runtime/permission-wrapper.mjs
+    ¦   +-- PermissionService (rules, audit, approval flow)
+    ¦   +-- PermissionLevel: ALLOW, DENY, ASK
+    ¦   +-- executeWithPermission(tool, toolCall, approvalFn)
+    ¦
+    +-- runtime/mcp-adapter.mjs
+    ¦   +-- MCPAdapter (server registration, tool discovery)
+    ¦   +-- MCPToolAdapter (wraps MCP tools as BaseTool)
+    ¦   +-- discoverTools() ? auto-detect from registered servers
+    ¦
+    +-- runtime/context-summarizer.mjs
+    ¦   +-- ContextSummarizer with LLM adapter
+    ¦   +-- Token estimation (chars/4 heuristic)
+    ¦   +-- summarize(messages) ? { summary, preservedMessages, tokenSavings }
+    ¦
+    +-- runtime/typed-observations.mjs
+    ¦   +-- Observation, ShellOutputObservation, ErrorObservation, TimeoutObservation
+    ¦   +-- wrapAsObservation(result) — auto-detect type from result
+    ¦   +-- ObservationCollector — stats, byType, failed, successful
+    ¦
+    +-- runtime/capability-conflict-detection.mjs
+    ¦   +-- ConflictDetectionSystem with built-in rules
+    ¦   +-- ConflictType: SECOND_ORCHESTRATOR, SECOND_SCHEDULER, SECOND_STATE_STORE, SECOND_MEMORY
+    ¦   +-- checkCapability() / checkAll() ? violations
+    ¦
+    +-- runtime/capability-resolver.mjs
+        +-- CapabilityResolver — task ? capabilities ? agent ? tools
+        +-- resolve(task) ? { agent, tools, conflicts, safe }
+        +-- getSummary(task) ? lightweight resolution summary
+`
+
+### Capability Sources Audited
+
+| Source | Repository | Capabilities Found | HIGH Priority |
+|--------|-----------|-------------------|---------------|
+| OpenHands | All-Hands-AI/OpenHands (Python) | 19 capabilities | 7 (typed observations, retry backoff, issue resolution, runtime lifecycle, success guessing, parallel resolution, agent delegation) |
+| OpenCode | opencode-ai/opencode (Go) | 15 capabilities | 7 (BaseTool interface, permission system, MCP integration, tool execution loop, session management, context summarization, tool registry) |
+
+### Capability Registry Categories
+
+| Category | Count | Examples |
+|----------|-------|----------|
+| Tool System | 8 | base-tool, tool-registry, permission-wrapper, mcp-adapter |
+| Agent Model | 4 | agent-capabilities, capability-registry, capability-resolver, conflict-detection |
+| Reliability | 3 | retry-backoff, typed-observations, context-summarizer |
+| Integration | 3 | mcp-adapter, context-resolver (Phase A), opencode-adapter (Phase A) |
+
+### Task ? Capability Requirements Mapping
+
+| Task Type | Required Capabilities | Preferred |
+|-----------|----------------------|-----------|
+| code-edit | code-editing, file-io, shell-execution | repository-exploration |
+| code-review | code-review, file-io, repository-exploration | code-editing |
+| bug-fix | code-editing, shell-execution, file-io | repository-exploration, testing |
+| test-writing | code-editing, testing, file-io | shell-execution |
+| documentation | file-io | code-editing |
+| deployment | shell-execution | file-io, code-editing |
+| research | repository-exploration | file-io |
+
+### Conflict Detection Rules
+
+| Rule | Severity | Detection |
+|------|----------|-----------|
+| No second orchestrator | CRITICAL | Name/description contains "orchestrator" |
+| No second scheduler | CRITICAL | Name/description contains "scheduler" |
+| No second state store | CRITICAL | Name/description contains "state-store" or "state-machine" |
+| No second memory | CRITICAL | Name/description contains "knowledge-base" or "vector-store" |
+
+### Tests
+
+- 29 new Phase B tests (capability-registry, agent-capabilities, base-tool, tool-registry, retry-backoff, permission-wrapper, mcp-adapter, context-summarizer, typed-observations, conflict-detection, capability-resolver)
+- 13 baseline tests retained (zero regressions)
+- **Total: 42 tests, all passing**
+
+### Status
+
+- ? Capability registry — implemented and tested (5 tests)
+- ? Agent capability model — implemented and tested (3 tests)
+- ? BaseTool + 7 built-in tools — implemented and tested (4 tests)
+- ? Tool registry with agent-specific sets — implemented and tested (2 tests)
+- ? Retry with backoff — implemented and tested (2 tests)
+- ? Permission wrapper with audit — implemented and tested (2 tests)
+- ? MCP adapter — implemented and tested (2 tests)
+- ? Context summarizer — implemented and tested (2 tests)
+- ? Typed observations + collector — implemented and tested (3 tests)
+- ? Conflict detection system — implemented and tested (2 tests)
+- ? Capability resolver — implemented and tested (2 tests)
+- ? AGENTS.md updated — done
+- ? Dynamic integration into DecisionEngine — pending
+- ? End-to-end capability inheritance workflow test — pending

@@ -2,6 +2,38 @@
 
 **Source of Truth** for your custom OpenCode environment.
 
+## Executable control plane (Phase A/B)
+
+`runtime/control-plane.mjs` is the single local authority for persistent mission
+state. It is model- and provider-neutral: OpenCode remains the provider/model
+source of truth, while the control plane records operational facts, task
+dependencies, failures, evidence, and checkpoints.
+
+State belongs to the project being engineered, not to this repository:
+
+```text
+target-project/.opencode-system/state.json
+```
+
+Run it directly while OpenCode adapters are being added:
+
+```powershell
+node C:\Users\bhavesh jeengar\OpenCode-System\runtime\cli.mjs init --project C:\work\my-project --goal "Add account recovery"
+node C:\Users\bhavesh jeengar\OpenCode-System\runtime\cli.mjs add-task --project C:\work\my-project --json '{"id":"plan","title":"Create plan","requiredEvidence":["review"]}'
+node C:\Users\bhavesh jeengar\OpenCode-System\runtime\cli.mjs start plan --project C:\work\my-project
+node C:\Users\bhavesh jeengar\OpenCode-System\runtime\cli.mjs evidence plan --project C:\work\my-project --json '{"type":"review","summary":"Plan reviewed"}'
+node C:\Users\bhavesh jeengar\OpenCode-System\runtime\cli.mjs complete plan --project C:\work\my-project
+node C:\Users\bhavesh jeengar\OpenCode-System\runtime\cli.mjs status --project C:\work\my-project
+```
+
+Available operations: `init`, `add-task`, `ready`, `start`, `evidence`,
+`complete`, `fail`, `checkpoint`, `status`, and `doctor`. Verify it with
+`npm test`.
+
+The audit and capability plan are in `docs/PHASE-0-AUDIT.md` and
+`docs/CAPABILITY-GAP-MATRIX.md`. Remaining work is tracked as adapters and
+execution features rather than represented as capability claims.
+
 This directory is **NEVER touched by OpenCode updates**. All custom configuration lives here and is synced to OpenCode's config directory via scripts.
 
 ## Architecture

@@ -388,6 +388,159 @@ if ($hasRalph) {
     $failCount++
 }
 
+# ── Runtime Files ──
+Write-Host ""
+Write-Host "Runtime Files:" -ForegroundColor Cyan
+
+$runtimeFiles = @(
+    @{ Name = "control-plane.mjs"; Path = "$SourceOfTruth\runtime\control-plane.mjs" },
+    @{ Name = "worker.mjs"; Path = "$SourceOfTruth\runtime\worker.mjs" },
+    @{ Name = "scheduler.mjs"; Path = "$SourceOfTruth\runtime\scheduler.mjs" },
+    @{ Name = "cli.mjs"; Path = "$SourceOfTruth\runtime\cli.mjs" },
+    @{ Name = "memory.mjs"; Path = "$SourceOfTruth\runtime\memory.mjs" },
+    @{ Name = "hooks.mjs"; Path = "$SourceOfTruth\runtime\hooks.mjs" },
+    @{ Name = "visual-dev-loop.mjs"; Path = "$SourceOfTruth\runtime\visual-dev-loop.mjs" },
+    @{ Name = "loop-operator.mjs"; Path = "$SourceOfTruth\runtime\loop-operator.mjs" },
+    @{ Name = "harness-optimizer.mjs"; Path = "$SourceOfTruth\runtime\harness-optimizer.mjs" }
+)
+
+foreach ($file in $runtimeFiles) {
+    if (Test-Path $file.Path) {
+        Write-Host "  [PASS] $($file.Name) present" -ForegroundColor Green
+        $passCount++
+    } else {
+        Write-Host "  [FAIL] $($file.Name) missing" -ForegroundColor Red
+        $failCount++
+    }
+}
+
+# ── Runtime Exports ──
+Write-Host ""
+Write-Host "Runtime Exports:" -ForegroundColor Cyan
+
+$cpContent = Get-Content "$SourceOfTruth\runtime\control-plane.mjs" -Raw
+if ($cpContent -match "export class ControlPlane") {
+    Write-Host "  [PASS] ControlPlane class exported" -ForegroundColor Green
+    $passCount++
+} else {
+    Write-Host "  [FAIL] ControlPlane class not exported" -ForegroundColor Red
+    $failCount++
+}
+
+$workerContent = Get-Content "$SourceOfTruth\runtime\worker.mjs" -Raw
+if ($workerContent -match "export class WorkerAdapter") {
+    Write-Host "  [PASS] WorkerAdapter class exported" -ForegroundColor Green
+    $passCount++
+} else {
+    Write-Host "  [FAIL] WorkerAdapter class not exported" -ForegroundColor Red
+    $failCount++
+}
+
+$schedulerContent = Get-Content "$SourceOfTruth\runtime\scheduler.mjs" -Raw
+if ($schedulerContent -match "export class Scheduler") {
+    Write-Host "  [PASS] Scheduler class exported" -ForegroundColor Green
+    $passCount++
+} else {
+    Write-Host "  [FAIL] Scheduler class not exported" -ForegroundColor Red
+    $failCount++
+}
+
+# ── CLI Commands ──
+Write-Host ""
+Write-Host "CLI Commands:" -ForegroundColor Cyan
+
+$cliContent = Get-Content "$SourceOfTruth\runtime\cli.mjs" -Raw
+$cliCommands = @('init', 'add-task', 'ready', 'start', 'evidence', 'complete', 'fail', 'checkpoint', 'status', 'run', 'step', 'schedule', 'loop', 'optimize', 'memory', 'hooks', 'vdl', 'doctor')
+$missingCli = @()
+foreach ($cmd in $cliCommands) {
+    if ($cliContent -match "case '$cmd'") {
+        # present
+    } else {
+        $missingCli += $cmd
+    }
+}
+if ($missingCli.Count -eq 0) {
+    Write-Host "  [PASS] All 18 CLI commands present" -ForegroundColor Green
+    $passCount++
+} else {
+    Write-Host "  [FAIL] Missing CLI commands: $($missingCli -join ', ')" -ForegroundColor Red
+    $failCount++
+}
+
+# ── Tests ──
+Write-Host ""
+Write-Host "Test Suite:" -ForegroundColor Cyan
+
+$testFile = "$SourceOfTruth\test\control-plane.test.mjs"
+if (Test-Path $testFile) {
+    Write-Host "  [PASS] test/control-plane.test.mjs present" -ForegroundColor Green
+    $passCount++
+    
+    $testContent = Get-Content $testFile -Raw
+    $testCount = ([regex]::Matches($testContent, "test\('")).Count
+    Write-Host "  [PASS] $testCount tests defined" -ForegroundColor Green
+    $passCount++
+} else {
+    Write-Host "  [FAIL] test file missing" -ForegroundColor Red
+    $failCount++
+}
+
+# ── AGENTS.md Runtime Section ──
+Write-Host ""
+Write-Host "Documentation:" -ForegroundColor Cyan
+
+if ($agentsContent -match "EXECUTABLE RUNTIME") {
+    Write-Host "  [PASS] AGENTS.md has EXECUTABLE RUNTIME section" -ForegroundColor Green
+    $passCount++
+} else {
+    Write-Host "  [FAIL] AGENTS.md missing EXECUTABLE RUNTIME section" -ForegroundColor Red
+    $failCount++
+}
+
+if ($agentsContent -match "ADAPTER CONTRACT") {
+    Write-Host "  [PASS] AGENTS.md has ADAPTER CONTRACT section" -ForegroundColor Green
+    $passCount++
+} else {
+    Write-Host "  [FAIL] AGENTS.md missing ADAPTER CONTRACT section" -ForegroundColor Red
+    $failCount++
+}
+
+# ── Agent-Kit Integration ──
+Write-Host ""
+Write-Host "Agent-Kit Integration:" -ForegroundColor Cyan
+
+$agentKitFiles = @(
+    @{ Name = "memory.mjs"; Path = "$SourceOfTruth\runtime\memory.mjs"; Export = "class Memory" },
+    @{ Name = "hooks.mjs"; Path = "$SourceOfTruth\runtime\hooks.mjs"; Export = "class HookRegistry" },
+    @{ Name = "visual-dev-loop.mjs"; Path = "$SourceOfTruth\runtime\visual-dev-loop.mjs"; Export = "class VisualDevLoop" },
+    @{ Name = "loop-operator.mjs"; Path = "$SourceOfTruth\runtime\loop-operator.mjs"; Export = "class LoopOperator" },
+    @{ Name = "harness-optimizer.mjs"; Path = "$SourceOfTruth\runtime\harness-optimizer.mjs"; Export = "class HarnessOptimizer" }
+)
+
+foreach ($file in $agentKitFiles) {
+    if (Test-Path $file.Path) {
+        $content = Get-Content $file.Path -Raw
+        if ($content -match "export $($file.Export)") {
+            Write-Host "  [PASS] $($file.Name) with $($file.Export) exported" -ForegroundColor Green
+            $passCount++
+        } else {
+            Write-Host "  [WARN] $($file.Name) present but export not found" -ForegroundColor Yellow
+            $warnCount++
+        }
+    } else {
+        Write-Host "  [FAIL] $($file.Name) missing" -ForegroundColor Red
+        $failCount++
+    }
+}
+
+if ($agentsContent -match "AGENT-KIT INTEGRATION") {
+    Write-Host "  [PASS] AGENTS.md has AGENT-KIT INTEGRATION section" -ForegroundColor Green
+    $passCount++
+} else {
+    Write-Host "  [FAIL] AGENTS.md missing AGENT-KIT INTEGRATION section" -ForegroundColor Red
+    $failCount++
+}
+
 # Summary
 Write-Host ""
 Write-Host "=== Verification Summary ===" -ForegroundColor Cyan

@@ -1,0 +1,14 @@
+{
+  "name": "opencode-system-control-plane",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Durable, local-first control plane for OpenCode-System.",
+  "scripts": {
+    "test": "node --test",
+    "doctor": "node runtime/cli.mjs doctor"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

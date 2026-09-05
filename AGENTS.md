@@ -1836,3 +1836,166 @@ PROJECT COMPLETE
 ```
 
 The objective is to create a **more modular, transparent, extensible and autonomous OpenCode engineering platform** while preserving upstream compatibility.
+
+---
+
+## 57. EXECUTABLE RUNTIME (Phase A/B)
+
+The control plane is no longer just documentation. It is a working state machine with execution adapters.
+
+### Runtime Files
+
+| File | Purpose |
+|------|---------|
+| `runtime/control-plane.mjs` | State machine: init, addTask, readyTasks, startTask, recordEvidence, completeTask, failTask, checkpoint, status, criticalPath |
+| `runtime/worker.mjs` | WorkerAdapter: executes tasks via shell, file, test, or manual executors; records evidence; classifies errors |
+| `runtime/scheduler.mjs` | Scheduler: autonomous loop that drains readyTasks, dispatches to WorkerAdapter, emits events, respects budgets |
+| `runtime/cli.mjs` | CLI: 12 commands — init, add-task, ready, start, evidence, complete, fail, checkpoint, status, run, step, schedule, doctor |
+| `test/control-plane.test.mjs` | 13 tests: DAG, evidence gates, failure/retry, cycle detection, shell execution, file execution, timeout classification, scheduler loop, step mode, budgets, events |
+
+### How It Works
+
+```
+User goal
+    ↓
+CLI: node runtime/cli.mjs init --project /path/to/project --goal "Ship feature"
+    ↓
+ControlPlane creates .opencode-system/state.json
+    ↓
+CLI: node runtime/cli.mjs add-task --project /path --json '{"id":"build","title":"Build","kind":"shell","command":"npm test"}'
+    ↓
+CLI: node runtime/cli.mjs schedule --project /path --max 50
+    ↓
+Scheduler loop:
+  1. readyTasks() → returns tasks with all dependencies met
+  2. WorkerAdapter.execute(taskId) → runs shell/file/test/manual
+  3. Evidence recorded → blocks completion if requiredEvidence not met
+  4. Task completed or failed → state updated atomically
+  5. Loop continues until: COMPLETE, BLOCKED, idle, or budget exhausted
+```
+
+### Evidence Gates
+
+Tasks declare `requiredEvidence` (e.g., `['test', 'review']`). A task cannot complete until all required evidence types have PASS verdicts. This prevents the system from claiming completion without verification.
+
+### Error Classification
+
+Failures are classified into categories: TIMEOUT, DEPENDENCY, NETWORK, SECURITY, CODE, TEST, UNKNOWN. Each failure is recorded with category, cause, and timestamp. Retries are bounded by `budgets.retriesPerTask`.
+
+### Adapter Contract
+
+Every adapter must (per `docs/CONTROL-PLANE-CONTRACT.md`):
+1. Read project state before work
+2. Register start/observation/result/failure events
+3. Store inspectable evidence before requesting completion
+4. Respect task status, retries, and budgets
+5. Remain cancellable
+
+### Status
+
+- ✅ Control plane state machine — implemented and tested
+- ✅ WorkerAdapter with shell, file, test, manual executors — implemented and tested
+- ✅ Scheduler autonomous loop — implemented and tested
+- ✅ CLI with 12 commands — implemented
+- ✅ 13 unit tests, all passing
+- ⏳ OpenCode agent spawning adapter — deferred (requires plugin hooks)
+- ⏳ Browser adapter — deferred (requires Playwright MCP integration)
+- ⏳ GitHub adapter — deferred (requires authenticated gh CLI integration)
+- ⏳ Worktree isolation — deferred (requires git worktree support)
+
+---
+
+## 58. AGENT-KIT INTEGRATION
+
+Source: `https://github.com/defuj/opencode-agent-kit` (33 agents, 47 commands, hooks, visual dev loop, agent memory, loop operator, harness optimizer).
+
+### What Was Integrated
+
+| Agent-Kit Feature | OpenCode-System Module | Type | Purpose |
+|---|---|---|---|
+| Agent Memory | `runtime/memory.mjs` | FREE alternative | File-based persistent memory (replaces paid agentmemory MCP) |
+| Visual Dev Loop | `runtime/visual-dev-loop.mjs` | NEW executor | Autonomous build→inspect→fix cycle using Chrome DevTools |
+| Loop Operator | `runtime/loop-operator.mjs` | NEW agent | Scheduler wrapper with stall detection, recovery, replanning |
+| Harness Optimizer | `runtime/harness-optimizer.mjs` | NEW agent | Config analysis for cost/quality/performance improvements |
+| Ponytail Hooks | `runtime/hooks.mjs` | NEW system | Executable lifecycle hooks (not just documentation) |
+| CLI Extensions | `runtime/cli.mjs` | UPDATED | Added: loop, optimize, memory, hooks, vdl commands |
+
+### What Was NOT Integrated (Intentional)
+
+| Agent-Kit Feature | Reason |
+|---|---|
+| @agentmemory/agentmemory MCP | PAID service — FREE constraint violated. Replaced with file-based memory.mjs |
+| portless MCP | Dev-only tool — Chrome DevTools MCP covers this use case |
+| ponytail (separate MCP) | Bundled into our hooks.mjs as executable functions |
+| 33 agent prompts | Many are redundant with our 20 agents. Selectively integrated loop-operator and harness-optimizer |
+| 47 slash commands | Many are subcommands of our existing commands. Consolidated into CLI extensions |
+
+### Architecture
+
+```
+AGENT-KIT INTEGRATION LAYER
+    │
+    ├── runtime/memory.mjs          — File-based persistent memory
+    │   ├── store(category, content, meta)
+    │   ├── search(query, options)
+    │   ├── recent(category, limit)
+    │   ├── stats()
+    │   ├── toMarkdown()
+    │   └── Categories: decision, pattern, failure, convention, insight
+    │
+    ├── runtime/visual-dev-loop.mjs — Autonomous visual development
+    │   ├── run(overrides) — build → navigate → inspect → fix loop
+    │   ├── stop()
+    │   └── Uses Chrome DevTools MCP for browser interaction
+    │
+    ├── runtime/loop-operator.mjs   — Scheduler with intelligence
+    │   ├── run() — wraps Scheduler with monitoring + recovery
+    │   ├── step() — single iteration with failure handling
+    │   ├── Recovery: retry → escalate → skip → abort
+    │   └── Events: loop:start/task-done/task-fail/recovery/replan/complete
+    │
+    ├── runtime/harness-optimizer.mjs — Config analysis
+    │   ├── analyze() — returns scored report
+    │   ├── Dimensions: cost, quality, performance, completeness
+    │   └── Output: score, issues, recommendations, quickWins, criticalIssues
+    │
+    └── runtime/hooks.mjs           — Executable lifecycle hooks
+        ├── HookRegistry — register/unregister/execute/observe
+        ├── Built-in hooks: sessionStart, taskBefore, taskAfter, taskFail, evidenceRecorded
+        └── installDefaultHooks() — sets up standard hook chain
+```
+
+### CLI Commands
+
+```bash
+# Loop Operator — autonomous scheduler with recovery
+node runtime/cli.mjs loop --project . --max 50 --timeout 600000
+
+# Harness Optimizer — config analysis
+node runtime/cli.mjs optimize --project .
+
+# Memory — persistent cross-session storage
+node runtime/cli.mjs memory store --category decision --content "Use ESM modules"
+node runtime/cli.mjs memory search --query "ESM" --category decision
+node runtime/cli.mjs memory recent --category failure --limit 10
+node runtime/cli.mjs memory stats
+node runtime/cli.mjs memory markdown
+
+# Hooks — lifecycle events
+node runtime/cli.mjs hooks install --project .
+node runtime/cli.mjs hooks list
+node runtime/cli.mjs hooks run --event session:start
+
+# Visual Dev Loop — autonomous UI iteration
+node runtime/cli.mjs vdl --url http://localhost:3000 --build "npm run dev" --max 10
+```
+
+### Status
+
+- ✅ File-based memory — implemented
+- ✅ Visual Dev Loop — implemented
+- ✅ Loop Operator — implemented
+- ✅ Harness Optimizer — implemented
+- ✅ Executable hooks — implemented
+- ✅ CLI extensions — implemented
+- ✅ AGENTS.md updated — done

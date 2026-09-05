@@ -1271,3 +1271,568 @@ The system must remain: AUTONOMOUS + ADAPTIVE + VERIFIED + COST-AWARE + SECURE +
 Never hallucinate. Never claim work was performed when it was not. Never claim verification without evidence. Never silently spend money. Never silently bypass security. Never silently replace the user's primary OpenCode provider.
 
 Always prefer: UNDERSTAND FIRST → SELECT THE RIGHT CAPABILITIES → PLAN → EXECUTE → VERIFY → ADAPT.
+
+---
+
+# PHASE 2: AUTONOMOUS ENGINEERING PLATFORM
+
+The following sections define the Phase 2 architecture upgrades.
+
+---
+
+## 36. UNIFIED EXECUTION MODEL
+
+The complete system operates as:
+
+```
+USER GOAL
+    ↓
+WORKSPACE DISCOVERY
+    ↓
+ENVIRONMENT DETECTION
+    ↓
+RESEARCH
+    ↓
+BRAINSTORM
+    ↓
+SPECIFICATION
+    ↓
+ARCHITECTURE
+    ↓
+PLAN
+    ↓
+PLAN REVIEW
+    ↓
+EPIC / TASK DAG
+    ↓
+COMMANDER
+    ↓
+DYNAMIC AGENT TEAM
+    ↓
+PARALLEL TASK EXECUTION
+    ↓
+ISOLATED WORKTREES / SANDBOX
+    ↓
+OBSERVE → ACT → OBSERVE
+    ↓
+IMPLEMENTATION
+    ↓
+TEST
+    ↓
+BROWSER / COMPUTER VERIFICATION
+    ↓
+SECURITY REVIEW
+    ↓
+SPEC REVIEW
+    ↓
+CODE REVIEW
+    ↓
+EVIDENCE GATE
+    │
+    ├── FAIL → CLASSIFY → SPECIALIST → DEBUG → FIX → RE-TEST
+    │
+    └── PASS
+          ↓
+       SAVE STATE
+          ↓
+       FRESH CONTEXT
+          ↓
+       RE-ANCHOR
+          ↓
+       COMMIT
+          ↓
+       GITHUB PR
+          ↓
+       PR REVIEW
+          ↓
+       FINAL AUDIT
+          ↓
+       DEPLOY / VERIFY
+          ↓
+       NEXT TASK
+          ↓
+       PROJECT COMPLETE
+```
+
+---
+
+## 37. NOCTURNE — GitHub Issue Automation
+
+Convert GitHub Issues into actionable branches with structured execution.
+
+### Flow
+```
+GitHub Issue → Parser → Ticket → Branch Plan → Git Branch → Execution
+```
+
+### Issue Types
+| Label/Keyword | Type | Branch Prefix |
+|---|---|---|
+| bug, error, broken | BUG | fix/ |
+| feature, add, implement | FEATURE | feature/ |
+| enhance, improve | ENHANCEMENT | enhance/ |
+| docs, documentation | DOCUMENTATION | docs/ |
+| refactor, clean | REFACTOR | refactor/ |
+
+### Branch Naming
+```
+{type}/issue-{number}-{slug}
+```
+
+### Ticket Structure
+- Ticket ID: NOC-YYYY-MM-DD-NNN
+- Issue analysis (title, description, labels, priority, type)
+- Branch plan (name, base, affected files)
+- Execution strategy (approach, steps, parallel tasks)
+- Verification plan (tests, reviews)
+
+---
+
+## 38. OH-MY-OPENCODE — Discovery, Context, Memory
+
+### Discovery Engine
+```
+Repository → Detect Project Type → Identify Entry Points → Build Context Map
+```
+
+### Context Engine
+```
+Task → Retrieve Relevant Context → Construct Primary/Secondary/Tertiary → Deliver
+```
+
+### Memory System
+```
+Global → User → Project → Repository → Epic → Task → Session → Current
+```
+
+### Session Recovery
+```
+Interrupted → Save State → New Session → Load State → Resume
+```
+
+---
+
+## 39. COMMANDER ENHANCEMENT — Single Authority
+
+### Commander Loop
+```
+INTAKE → UNDERSTAND → PLAN → DELEGATE → EXECUTE → VERIFY → DECIDE
+```
+
+### Hook System
+```
+before_task, after_task, before_agent, after_agent,
+before_tool, after_tool, before_commit, after_commit,
+before_review, after_review, on_failure, on_completion,
+on_context_compaction, on_session_resume
+```
+
+### Hook Rules
+1. Deterministic
+2. No recursion (max depth: 3)
+3. Budget: 5 seconds, 1000 tokens, 10 tool calls
+4. Read-only by default
+5. Documented
+
+### Background Agents
+- Agents that continue while main flow proceeds
+- Must report progress, have timeouts, be cancellable
+- Commander monitors all agents
+
+---
+
+## 40. SWARM — Dynamic Specialist Team
+
+### Specialists
+| Role | Expertise | MCPs |
+|---|---|---|
+| Architect | System design, architecture | Context7, Memory, GitHub |
+| Backend | Server-side, APIs, logic | Context7, GitHub, Filesystem |
+| Frontend | UI/UX, browser, CSS | Playwright, Chrome DevTools, Figma |
+| Security | Vulnerabilities, auth, OWASP | GitHub, Filesystem, Playwright |
+| Database | Schema, queries, migrations | Database, Context7, Filesystem |
+| QA | Testing, coverage, automation | Playwright, GitHub, Filesystem |
+| DevOps | Deployment, CI/CD, Docker | GitHub, Filesystem |
+| Research | Web research, documentation | Firecrawl, Context7, Memory |
+| Docs | Technical writing, API docs | Filesystem, GitHub |
+
+### Team Assembly Rules
+- Simple: 1 specialist
+- Medium: 2-3 specialists
+- Complex: 4-5 specialists
+- Max concurrent: 5
+- Max total: 9
+
+---
+
+## 41. FLOW-NEXT — Task Graph DAG
+
+### Task Structure
+```
+Task ID, Title, Status, Priority, Dependencies, Blocks,
+Parallelizable, Effort, Acceptance Criteria, Evidence
+```
+
+### Status Flow
+```
+PENDING → IN_PROGRESS → COMPLETE
+                     → BLOCKED → IN_PROGRESS
+                     → FAILED → (retry or escalate)
+```
+
+### DAG Operations
+- Add task
+- Complete task (unblock dependents)
+- Fail task (retry or escalate)
+- Detect parallel groups
+- Calculate critical path
+
+### Scheduler
+- Ready tasks = all dependencies complete
+- Sort by priority
+- Assign to available specialists
+- Execute in parallel when possible
+
+---
+
+## 42. FORGE — Autonomous Execution
+
+### Execution Modes
+```
+Interactive: User → Agent → Approval → Next step
+Assisted: Goal → Plan → Approval → Autonomous
+Autonomous: Goal → Plan → Execute → Verify → Fix → Continue
+Project: Epic → DAG → Parallel → Verification → PRs → Complete
+```
+
+### Execution Components
+- Build Engine: Implement → Test → Verify
+- Debug Engine: Error → Hypothesis → Fix → Test
+- Specialist Engine: Spawn → Assign → Monitor → Collect
+- Background Engine: Spawn → Budget → Monitor → Collect
+
+### Isolation
+- Git worktrees for isolated work
+- Sandboxed execution for high-risk tasks
+- Least-privilege tool permissions
+
+### Budget Management
+- Token budget per task
+- Time budget per task
+- Iteration budget (max retries)
+- Tool-call budget
+
+---
+
+## 43. VERIFICATION STACK
+
+### Verification Layers
+```
+Tester → Browser/UI → Security → Spec Review → Code Review → Evidence Gate
+```
+
+### Evidence Gate Decision
+```
+All pass → PASS → COMMIT
+Some fail → CONDITIONAL PASS → Fix
+Critical fail → FAIL → Escalate
+```
+
+### Evidence Storage
+- Test results
+- Build logs
+- Screenshots
+- DOM snapshots
+- Security audit results
+- Code review comments
+- Spec review checklists
+
+---
+
+## 44. RALPH — Persistent Loop
+
+### Core Loop
+```
+TASK → EXECUTE → VERIFY → SAVE STATE → FRESH CONTEXT → RE-ANCHOR → NEXT TASK
+```
+
+### State Persistence
+- Loop state (iteration, task, progress)
+- Project state (tasks, evidence, decisions)
+- Context snapshots
+- Failure history
+
+### Completion Detection
+- All tasks complete
+- All verification passed
+- All evidence collected
+- No remaining blockers
+
+### Context Rotation
+- Trigger at 90% context capacity
+- Compress context
+- Save state
+- Start fresh
+- Resume from checkpoint
+
+---
+
+## 45. CONTEXT ENGINE
+
+### Retrieval Methods
+- By task: Look up task, find related files/decisions
+- By file: Read file, find imports/references
+- By symbol: Find definition, usages, tests
+- By history: Recent decisions, changes, failures
+- By relevance: Search across all sources, rank
+
+### Compression Levels
+```
+LIGHT: Remove old findings, summarize completed tasks
+MODERATE: Summarize old sections, prune irrelevant files
+AGGRESSIVE: Keep only current task and essentials
+```
+
+### Re-anchoring
+```
+Load last snapshot → Load project state → Load task graph
+→ Identify position → Reconstruct context → Resume
+```
+
+---
+
+## 46. MODEL ROUTER
+
+### Task Classification
+| Task Type | Model Preference |
+|---|---|
+| Reasoning | Reasoning-optimized, large context |
+| Coding | Code-optimized, type-aware |
+| Fast | Fast, cheap, low latency |
+| Creative | Creative, good writing |
+| Research | Research-capable, web-aware |
+| Review | Independent, strong analysis |
+| Security | Security-aware, OWASP knowledge |
+| Docs | Efficient, good writing |
+| Vision | Multimodal, vision capabilities |
+
+### Routing Logic
+```
+Request → Classify → Check Primary → Use if available
+                   → Check OmniRoute → Use free model
+                   → Check Free Providers → Use if available
+                   → STOP → Report to user
+```
+
+---
+
+## 47. HOOK SYSTEM
+
+### Hook Registry
+```
+Hook Name, Type, Handler, Priority, Enabled, Documentation
+```
+
+### Hook Execution
+```
+Event → Look up hooks → Sort by priority → Execute → Collect results → Continue
+```
+
+---
+
+## 48. OBSERVABILITY
+
+### Event Types
+- Agent events (spawned, completed, failed, action)
+- Tool events (called, completed, failed)
+- Task events (created, started, completed, failed, blocked)
+- System events (mission started/completed, context compacted, state saved, error)
+
+### Dashboard
+- Active mission, current task, active agents
+- Running tools, model used, token/cost usage
+- Tests status, review status, remaining tasks
+
+---
+
+## 49. AUTONOMOUS MODES
+
+### Interactive
+```
+User → Agent → User approval → Next step
+```
+
+### Assisted
+```
+User goal → Plan → User approval → Autonomous execution
+```
+
+### Autonomous
+```
+User goal → Plan → Execute → Verify → Fix → Continue → Complete
+```
+
+### Project Autonomous
+```
+Epic → Task DAG → Parallel execution → Verification → PRs → Integration → Final audit
+```
+
+Always provide stop/pause controls.
+
+---
+
+## 50. COMMAND INTERFACE
+
+```
+/task <objective>     Start a mission
+/issue <url>          Import GitHub Issue
+/plan                 Create task graph
+/swarm                Spawn specialist team
+/gate                 Run evidence gate
+/save                 Save current state
+/context              Context snapshot
+/model                Show model router
+/stop                 Stop active mission
+/status               Show system status
+```
+
+---
+
+## 51. COST AND RESOURCE CONTROL
+
+Every autonomous execution supports:
+- Token budget
+- Time budget
+- Iteration budget
+- Tool-call budget
+- Model budget
+- Parallel-agent budget
+
+Commander stops or escalates when limits exceeded.
+
+---
+
+## 52. SAFETY AND ESCALATION
+
+### Escalation Triggers
+- Budget exceeded
+- Repeated failure (3+ retries)
+- Ambiguous requirement
+- Destructive operation
+- Security-sensitive action
+- Credential required
+- Architecture decision with major consequences
+- Irreversible deployment
+
+### Permission Levels
+```
+SAFE: Read-only operations
+ASSISTED: Local writes with approval
+AUTONOMOUS: Local writes without approval
+FULL-AUTONOMOUS: External writes with approval
+```
+
+---
+
+## 53. FAILURE MEMORY
+
+Persistent failure storage:
+```
+Failure → Cause → Attempted Solutions → Successful Solution
+→ Affected Files → Tests → Prevention
+```
+
+Before repeating difficult tasks, retrieve relevant previous failures.
+
+---
+
+## 54. FINAL ARCHITECTURAL RULE
+
+```
+ONE COMMANDER
+ONE PROJECT STATE
+ONE TASK GRAPH
+ONE AUTONOMOUS LOOP ENGINE
+ONE VERIFICATION GATE
+ONE MODEL ROUTING LAYER
+```
+
+Specialized systems provide capabilities but must not create competing control planes.
+
+---
+
+## 55. CAPABILITY MATRIX
+
+| Source | Primary Inheritance |
+|---|---|
+| Oh-My-OpenCode | Orchestration, agents, hooks, context |
+| Superpowers | Brainstorming, specification, TDD, review |
+| Flow-Next | Epics, DAG, dependencies, project state |
+| Forge | Autonomous execution, isolation, recovery |
+| Ralph/OpenRalph | Persistent loops, fresh context, continuation |
+| OpenCode Swarm | Specialist teams, parallel agents, gates |
+| Nocturne | GitHub issue → branch → PR |
+| OpenCoder | Plan → Build → Verify → Commit → Next |
+| OpenHands | Runtime, observe/act, terminal, browser |
+
+---
+
+## 56. FINAL ACCEPTANCE
+
+The system is complete when it can demonstrate:
+
+```
+User gives high-level goal
+    ↓
+Workspace understands repository
+    ↓
+Commander researches
+    ↓
+Requirements generated
+    ↓
+Specification created
+    ↓
+Architecture created
+    ↓
+Implementation plan created
+    ↓
+Tasks/dependencies generated
+    ↓
+Independent plan review
+    ↓
+Parallel tasks identified
+    ↓
+Specialist agents selected
+    ↓
+Isolated implementation
+    ↓
+Tests executed
+    ↓
+Browser/UI verification
+    ↓
+Security review
+    ↓
+Code review
+    ↓
+Evidence collected
+    ↓
+Failure → automatic debugging
+    ↓
+Fresh context
+    ↓
+Continue remaining tasks
+    ↓
+Commit
+    ↓
+GitHub PR
+    ↓
+PR review/fixes
+    ↓
+Final verification
+    ↓
+All requirements satisfied
+    ↓
+PROJECT COMPLETE
+```
+
+The objective is to create a **more modular, transparent, extensible and autonomous OpenCode engineering platform** while preserving upstream compatibility.

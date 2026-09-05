@@ -256,6 +256,138 @@ if (Test-Path "$OpenCodeConfig\agents") {
     }
 }
 
+# Phase 2 Components
+Write-Host ""
+Write-Host "Phase 2 Components:" -ForegroundColor Yellow
+
+# NOCTURNE
+Test-Component "NOCTURNE agent exists" { Test-Path "$SourceOfTruth\agents\nocturne.md" }
+Test-Component "NOCTURNE parser exists" { Test-Path "$SourceOfTruth\agents\nocturne-parser.md" }
+Test-Component "NOCTURNE ticket exists" { Test-Path "$SourceOfTruth\agents\nocturne-ticket.md" }
+Test-Component "NOCTURNE branch exists" { Test-Path "$SourceOfTruth\agents\nocturne-branch.md" }
+
+# Oh-My-OpenCode
+Test-Component "Oh-My-OpenCode exists" { Test-Path "$SourceOfTruth\agents\oh-my-opencode.md" }
+
+# Commander Enhanced
+Test-Component "Commander enhanced exists" { Test-Path "$SourceOfTruth\agents\commander-enhanced.md" }
+
+# Swarm
+Test-Component "Swarm exists" { Test-Path "$SourceOfTruth\agents\swarm.md" }
+
+# Flow-Next
+Test-Component "Flow-Next exists" { Test-Path "$SourceOfTruth\agents\flow-next.md" }
+
+# Forge
+Test-Component "Forge exists" { Test-Path "$SourceOfTruth\agents\forge.md" }
+
+# Verification Stack
+Test-Component "Verification stack exists" { Test-Path "$SourceOfTruth\agents\verification-stack.md" }
+
+# Ralph
+Test-Component "Ralph exists" { Test-Path "$SourceOfTruth\agents\ralph.md" }
+
+# Context Engine
+Test-Component "Context engine exists" { Test-Path "$SourceOfTruth\agents\context-engine.md" }
+
+# Model Router
+Test-Component "Model router exists" { Test-Path "$SourceOfTruth\agents\model-router.md" }
+
+# Hooks
+Test-Component "Hooks system exists" { Test-Path "$SourceOfTruth\agents\hooks.md" }
+
+# Observability
+Test-Component "Observability exists" { Test-Path "$SourceOfTruth\agents\observability.md" }
+
+Write-Host ""
+
+# Templates
+Write-Host "Templates:" -ForegroundColor Yellow
+Test-Component "templates/ directory exists" { Test-Path "$SourceOfTruth\templates" }
+Test-Component "mission-brief template exists" { Test-Path "$SourceOfTruth\templates\mission-brief.md" }
+Test-Component "task-graph template exists" { Test-Path "$SourceOfTruth\templates\task-graph.md" }
+Test-Component "execution-report template exists" { Test-Path "$SourceOfTruth\templates\execution-report.md" }
+Test-Component "evidence-gate template exists" { Test-Path "$SourceOfTruth\templates\evidence-gate.md" }
+Test-Component "project-state template exists" { Test-Path "$SourceOfTruth\templates\project-state.md" }
+Test-Component "swarm-config template exists" { Test-Path "$SourceOfTruth\templates\swarm-config.md" }
+Test-Component "context-snapshot template exists" { Test-Path "$SourceOfTruth\templates\context-snapshot.md" }
+Test-Component "nocturne-ticket template exists" { Test-Path "$SourceOfTruth\templates\nocturne-ticket.md" }
+Test-Component "ralph-state template exists" { Test-Path "$SourceOfTruth\templates\ralph-state.md" }
+Test-Component "model-router-config template exists" { Test-Path "$SourceOfTruth\templates\model-router-config.md" }
+
+Write-Host ""
+
+# Commands
+Write-Host "Commands:" -ForegroundColor Yellow
+Test-Component "commands/ directory exists" { Test-Path "$SourceOfTruth\commands" }
+Test-Component "task command exists" { Test-Path "$SourceOfTruth\commands\task.md" }
+Test-Component "issue command exists" { Test-Path "$SourceOfTruth\commands\issue.md" }
+Test-Component "plan command exists" { Test-Path "$SourceOfTruth\commands\plan.md" }
+Test-Component "swarm command exists" { Test-Path "$SourceOfTruth\commands\swarm.md" }
+Test-Component "gate command exists" { Test-Path "$SourceOfTruth\commands\gate.md" }
+Test-Component "save command exists" { Test-Path "$SourceOfTruth\commands\save.md" }
+Test-Component "context command exists" { Test-Path "$SourceOfTruth\commands\context.md" }
+Test-Component "model command exists" { Test-Path "$SourceOfTruth\commands\model.md" }
+
+Write-Host ""
+
+# AGENTS.md Phase 2 sections
+Write-Host "AGENTS.md:" -ForegroundColor Yellow
+$agentsContent = Get-Content "$SourceOfTruth\AGENTS.md" -Raw
+$hasPhase2 = $agentsContent -match "PHASE 2: AUTONOMOUS ENGINEERING PLATFORM"
+if ($hasPhase2) {
+    Write-Host "  [PASS] Phase 2 sections present" -ForegroundColor Green
+    $passCount++
+} else {
+    Write-Host "  [FAIL] Phase 2 sections missing" -ForegroundColor Red
+    $failCount++
+}
+
+$hasNocturne = $agentsContent -match "NOCTURNE"
+if ($hasNocturne) {
+    Write-Host "  [PASS] NOCTURNE section present" -ForegroundColor Green
+    $passCount++
+} else {
+    Write-Host "  [FAIL] NOCTURNE section missing" -ForegroundColor Red
+    $failCount++
+}
+
+$hasSwarm = $agentsContent -match "SWARM"
+if ($hasSwarm) {
+    Write-Host "  [PASS] SWARM section present" -ForegroundColor Green
+    $passCount++
+} else {
+    Write-Host "  [FAIL] SWARM section missing" -ForegroundColor Red
+    $failCount++
+}
+
+$hasFlowNext = $agentsContent -match "FLOW-NEXT"
+if ($hasFlowNext) {
+    Write-Host "  [PASS] FLOW-NEXT section present" -ForegroundColor Green
+    $passCount++
+} else {
+    Write-Host "  [FAIL] FLOW-NEXT section missing" -ForegroundColor Red
+    $failCount++
+}
+
+$hasForge = $agentsContent -match "FORGE"
+if ($hasForge) {
+    Write-Host "  [PASS] FORGE section present" -ForegroundColor Green
+    $passCount++
+} else {
+    Write-Host "  [FAIL] FORGE section missing" -ForegroundColor Red
+    $failCount++
+}
+
+$hasRalph = $agentsContent -match "RALPH"
+if ($hasRalph) {
+    Write-Host "  [PASS] RALPH section present" -ForegroundColor Green
+    $passCount++
+} else {
+    Write-Host "  [FAIL] RALPH section missing" -ForegroundColor Red
+    $failCount++
+}
+
 # Summary
 Write-Host ""
 Write-Host "=== Verification Summary ===" -ForegroundColor Cyan

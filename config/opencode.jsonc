@@ -1,4 +1,4 @@
-{
+﻿{
   "$schema": "https://opencode.ai/config.json",
 
   "instructions": ["AGENTS.md"],
@@ -87,13 +87,13 @@
       "url": "https://mcp.figma.com/mcp",
       "enabled": false,
       "oauth": true,
-      "description": "Figma design context — DISABLED (requires Figma Dev/Full seat + OAuth). NOT FREE."
+      "description": "Figma design context â€” DISABLED (requires Figma Dev/Full seat + OAuth). NOT FREE."
     },
     "google-flow": {
       "type": "local",
       "command": ["node", "C:\\Users\\bhavesh jeengar\\.config\\opencode\\google-flow-mcp\\dist\\index.js"],
       "enabled": false,
-      "description": "Google Flow MCP — DISABLED (requires Chrome CDP + real Google email). NOT FREE."
+      "description": "Google Flow MCP â€” DISABLED (requires Chrome CDP + real Google email). NOT FREE."
     },
     "firecrawl": {
       "type": "local",
@@ -108,7 +108,7 @@
       "type": "local",
       "command": ["npx", "-y", "open-computer-use", "mcp"],
       "enabled": false,
-      "description": "Desktop control — DISABLED (requires Docker). NOT FREE."
+      "description": "Desktop control â€” DISABLED (requires Docker). NOT FREE."
     },
     "chirpie": {
       "type": "local",
@@ -132,25 +132,25 @@
       "type": "local",
       "command": ["npx", "-y", "@cmsmcp/wordpress"],
       "enabled": true,
-      "description": "WordPress CMS management — posts, pages, media, users, comments. 337 tools."
+      "description": "WordPress CMS management â€” posts, pages, media, users, comments. 337 tools."
     },
     "woocommerce": {
       "type": "local",
       "command": ["npx", "-y", "@cmsmcp/woocommerce"],
       "enabled": true,
-      "description": "WooCommerce store management — products, orders, customers, coupons. 95 tools."
+      "description": "WooCommerce store management â€” products, orders, customers, coupons. 95 tools."
     },
     "shopify": {
       "type": "local",
       "command": ["npx", "-y", "@cmsmcp/shopify"],
       "enabled": true,
-      "description": "Shopify store management — products, orders, customers, inventory. 147 tools."
+      "description": "Shopify store management â€” products, orders, customers, inventory. 147 tools."
     },
     "dbmcp": {
       "type": "local",
       "command": ["dbmcp", "stdio", "--db-backend", "sqlite", "--db-name", ":memory:"],
       "enabled": true,
-      "description": "Database MCP — MySQL, PostgreSQL, SQLite support. Configure DB_BACKEND, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME env vars for your database."
+      "description": "Database MCP â€” MySQL, PostgreSQL, SQLite support. Configure DB_BACKEND, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME env vars for your database."
     }
   },
 
@@ -181,3 +181,4 @@
     }
   }
 }
+

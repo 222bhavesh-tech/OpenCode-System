@@ -1,6 +1,6 @@
-# Master MCP Registry
+﻿# Master MCP Registry
 
-**Last Updated:** 2026-09-03
+**Last Updated:** 2026-09-04
 **OpenCode Version:** 1.18.27
 **Policy:** FREE-FIRST, SELF-HOSTED PREFERRED
 
@@ -10,14 +10,14 @@
 
 | Name | Category | Free Status | Primary Agent | Allowed Agents | Status |
 |------|----------|-------------|---------------|----------------|--------|
-| GitHub | Development | FREE | Build | Workspace, Commander, Planner, Build, Reviewer | ✅ ACTIVE |
-| Filesystem | Development | FREE | Build | Workspace, Commander, Planner, Build, Reviewer | ✅ ACTIVE |
-| Playwright | Browser | FREE | Build | Workspace, Commander, Planner, Build, Reviewer | ✅ ACTIVE |
-| Memory | Knowledge | FREE | Planner | Workspace, Commander, Planner, Build, Reviewer | ✅ ACTIVE |
-| Context7 | Documentation | FREE | Planner | Workspace, Commander, Planner, Build, Reviewer | ✅ ACTIVE |
-| Chrome DevTools | Browser | FREE | Build | Workspace, Build, Reviewer | ✅ ACTIVE |
-| Firecrawl | Web Scraping | FREE (limited) | Planner | Workspace, Planner, Build | ✅ ACTIVE |
-| Chirpie | Social | FREE | Commander | Commander, Planner | ✅ ACTIVE |
+| GitHub | Development | FREE | Build | Workspace, Commander, Planner, Build, Reviewer | âœ… ACTIVE |
+| Filesystem | Development | FREE | Build | Workspace, Commander, Planner, Build, Reviewer | âœ… ACTIVE |
+| Playwright | Browser | FREE | Build | Workspace, Commander, Planner, Build, Reviewer | âœ… ACTIVE |
+| Memory | Knowledge | FREE | Planner | Workspace, Commander, Planner, Build, Reviewer | âœ… ACTIVE |
+| Context7 | Documentation | FREE | Planner | Workspace, Commander, Planner, Build, Reviewer | âœ… ACTIVE |
+| Chrome DevTools | Browser | FREE | Build | Workspace, Build, Reviewer | âœ… ACTIVE |
+| Firecrawl | Web Scraping | FREE (limited) | Planner | Workspace, Planner, Build | âœ… ACTIVE |
+| Chirpie | Social | FREE | Commander | Commander, Planner | âœ… ACTIVE |
 
 ---
 
@@ -28,15 +28,15 @@
 | Name | Package | Free Status | Install Method | Notes |
 |------|---------|-------------|----------------|-------|
 | SearXNG | `mcp-searxng` | FREE | `npm install -g mcp-searxng` | Self-hosted metasearch, requires Docker for SearXNG instance |
-| Fetch | `mcp-fetch-server` | FREE ✅ | `npm install -g mcp-fetch-server` | Web content as HTML/Markdown/JSON/YouTube transcripts |
-| Scrapling | `scrapling-mcp` | FREE | Python pip install | Anti-bot scraping, requires Python |
+| Fetch | `mcp-fetch-server` | FREE âœ… | `npm install -g mcp-fetch-server` | Web content as HTML/Markdown/JSON/YouTube transcripts |
+
 
 ### DEVELOPMENT CATEGORY
 
 | Name | Package | Free Status | Install Method | Notes |
 |------|---------|-------------|----------------|-------|
-| Sequential Thinking | `@modelcontextprotocol/server-sequential-thinking` | FREE ✅ | `npm install -g @modelcontextprotocol/server-sequential-thinking` | Step-by-step reasoning |
-| Sentry | `@sentry/mcp-server` | FREE (self-hosted) | `npx -y @sentry/mcp-server` | Error tracking, requires Sentry instance |
+| Sequential Thinking | `@modelcontextprotocol/server-sequential-thinking` | FREE âœ… | `npm install -g @modelcontextprotocol/server-sequential-thinking` | Step-by-step reasoning |
+
 
 ### UI/UX CATEGORY
 
@@ -49,15 +49,15 @@
 
 | Name | Package | Free Status | Install Method | Notes |
 |------|---------|-------------|----------------|-------|
-| WordPress | `@cmsmcp/wordpress` | FREE ✅ | `npm install -g @cmsmcp/wordpress` | 337 tools, requires WordPress REST API |
-| WooCommerce | `@cmsmcp/woocommerce` | FREE ✅ | `npm install -g @cmsmcp/woocommerce` | 95 tools, requires WooCommerce REST API |
-| Shopify | `@cmsmcp/shopify` | FREE ✅ | `npm install -g @cmsmcp/shopify` | 147 tools, requires Shopify Admin API |
+| WordPress | `@cmsmcp/wordpress` | FREE âœ… | `npm install -g @cmsmcp/wordpress` | 337 tools, requires WordPress REST API |
+| WooCommerce | `@cmsmcp/woocommerce` | FREE âœ… | `npm install -g @cmsmcp/woocommerce` | 95 tools, requires WooCommerce REST API |
+| Shopify | `@cmsmcp/shopify` | FREE âœ… | `npm install -g @cmsmcp/shopify` | 147 tools, requires Shopify Admin API |
 
 ### DATABASE CATEGORY
 
 | Name | Package | Free Status | Install Method | Notes |
 |------|---------|-------------|----------------|-------|
-| dbmcp | `dbmcp` | FREE ✅ | `curl -L https://dbmcp.haymon.ai/install.ps1 \| iex` | Single binary, MySQL/PostgreSQL/SQLite, PII redaction, write-prevention |
+| dbmcp | `dbmcp` | FREE âœ… | `curl -L https://dbmcp.haymon.ai/install.ps1 \| iex` | Single binary, MySQL/PostgreSQL/SQLite, PII redaction, write-prevention |
 | mcp-multi-db | `mcp-multi-db` | FREE | `npm install -g mcp-multi-db` | Multi-database, read-only default |
 | universal-db-mcp | `universal-db-mcp` | FREE | `pip install universal-db-mcp` | Python, PostgreSQL/SQLite/MySQL/DuckDB |
 
@@ -87,9 +87,9 @@
 
 | Name | Reason | Status |
 |------|--------|--------|
-| Figma | Requires Figma Dev/Full seat + OAuth | ❌ DISABLED |
-| Google Flow | Requires Chrome CDP + real Google email | ❌ DISABLED |
-| Computer Use | Requires Docker | ❌ DISABLED |
+| Figma | Requires Figma Dev/Full seat + OAuth | âŒ DISABLED |
+| Google Flow | Requires Chrome CDP + real Google email | âŒ DISABLED |
+| Computer Use | Requires Docker | âŒ DISABLED |
 
 ---
 
@@ -102,7 +102,7 @@
 - Chrome DevTools, Firecrawl, Chirpie
 
 ### OPTIONAL
-- SearXNG, Fetch, Scrapling, Sequential Thinking, Sentry
+- SearXNG
 
 ### STANDBY
 - shadcn, Storybook, CMS MCPs, Database MCPs, Social MCPs, Google MCPs
@@ -120,20 +120,20 @@
 
 | MCP | Workspace | Commander | Planner | Build | Reviewer |
 |-----|-----------|-----------|---------|-------|----------|
-| GitHub | ✅ | ✅ | ✅ | ✅ | ✅ (read) |
-| Filesystem | ✅ | ✅ | ✅ | ✅ | ✅ (read) |
-| Playwright | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Memory | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Context7 | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Chrome DevTools | ✅ | - | ✅ | ✅ | ✅ |
-| Firecrawl | ✅ | - | ✅ | ✅ | - |
-| Chirpie | - | ✅ | ✅ | - | - |
-| SearXNG | ✅ | - | ✅ | - | - |
-| Fetch | ✅ | - | ✅ | - | - |
-| CMS MCPs | - | - | ✅ | ✅ | ✅ (read) |
-| Database MCPs | - | - | ✅ (read) | ✅ | ✅ (read) |
-| Social MCPs | - | - | ✅ (read) | - | - |
-| Google MCPs | - | - | ✅ (read) | - | - |
+| GitHub | âœ… | âœ… | âœ… | âœ… | âœ… (read) |
+| Filesystem | âœ… | âœ… | âœ… | âœ… | âœ… (read) |
+| Playwright | âœ… | âœ… | âœ… | âœ… | âœ… |
+| Memory | âœ… | âœ… | âœ… | âœ… | âœ… |
+| Context7 | âœ… | âœ… | âœ… | âœ… | âœ… |
+| Chrome DevTools | âœ… | - | âœ… | âœ… | âœ… |
+| Firecrawl | âœ… | - | âœ… | âœ… | - |
+| Chirpie | - | âœ… | âœ… | - | - |
+| SearXNG | âœ… | - | âœ… | - | - |
+| Fetch | âœ… | - | âœ… | - | - |
+| CMS MCPs | - | - | âœ… | âœ… | âœ… (read) |
+| Database MCPs | - | - | âœ… (read) | âœ… | âœ… (read) |
+| Social MCPs | - | - | âœ… (read) | - | - |
+| Google MCPs | - | - | âœ… (read) | - | - |
 
 ---
 
@@ -148,10 +148,10 @@
 7. ~~Firecrawl~~ (installed)
 8. ~~Chirpie~~ (installed)
 9. SearXNG (web search)
-10. Fetch (lightweight URL fetching)
-11. Sequential Thinking (reasoning)
-12. dbmcp (database)
-13. CMS MCPs (WordPress, WooCommerce, Shopify)
+10. ~~Fetch~~ (installed)
+11. ~~Sequential Thinking~~ (installed)
+12. ~~dbmcp~~ (installed)
+13. ~~CMS MCPs~~ (installed)
 14. Social MCPs (evaluate per project)
 15. Google MCPs (evaluate per project)
 
@@ -161,6 +161,9 @@
 
 - All MCPs must be FREE or have explicit user approval
 - No paid MCP may be activated without user approval
-- MCPs consume model context — keep unnecessary MCPs disabled
+- MCPs consume model context â€” keep unnecessary MCPs disabled
 - Workspace classifies MCPs per project
 - Reviewer independently verifies MCP usage
+
+
+

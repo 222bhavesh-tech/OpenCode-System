@@ -1,4 +1,4 @@
-# verify.ps1 — Verify OpenCode Custom System
+﻿# verify.ps1 â€” Verify OpenCode Custom System
 # Checks all components are present and correctly configured
 # Usage: .\verify.ps1 [-Detailed]
 
@@ -173,11 +173,41 @@ Write-Host ""
 # MCPs
 Write-Host "MCPs:" -ForegroundColor Yellow
 Test-Component "MCP config exists in source" { Test-Path "$SourceOfTruth\mcp\mcp.jsonc" }
+Test-Component "MCP registry exists" { Test-Path "$SourceOfTruth\mcp\registry.md" }
 
 if (Test-Path "$OpenCodeConfig\opencode.jsonc") {
     $config = Get-Content "$OpenCodeConfig\opencode.jsonc" -Raw | ConvertFrom-Json
     $enabledMCPs = $config.mcp.PSObject.Properties | Where-Object { $_.Value.enabled -eq $true }
     Write-Host "  [INFO] $($enabledMCPs.Count) MCPs enabled" -ForegroundColor Gray
+    
+    # MCP categories
+    $categories = @{
+        "Development" = @("github", "filesystem", "sentry")
+        "Browser" = @("playwright", "chrome-devtools")
+        "Knowledge" = @("memory", "context7")
+        "Web" = @("firecrawl", "fetch", "scrapling")
+        "Reasoning" = @("sequential-thinking")
+        "CMS" = @("wordpress", "woocommerce", "shopify")
+        "Database" = @("dbmcp")
+        "Social" = @("chirpie")
+    }
+    
+    foreach ($category in $categories.Keys) {
+        $categoryMCPs = $categories[$category]
+        $activeCount = 0
+        foreach ($mcp in $categoryMCPs) {
+            if ($config.mcp.$mcp -and $config.mcp.$mcp.enabled -eq $true) {
+                $activeCount++
+            }
+        }
+        Write-Host "  [INFO] $category : $activeCount/$($categoryMCPs.Count) active" -ForegroundColor Gray
+    }
+    
+    # Check for disabled non-free MCPs
+    $disabledMCPs = $config.mcp.PSObject.Properties | Where-Object { $_.Value.enabled -eq $false }
+    if ($disabledMCPs.Count -gt 0) {
+        Write-Host "  [INFO] $($disabledMCPs.Count) MCPs disabled (non-free)" -ForegroundColor Gray
+    }
 }
 
 Write-Host ""
@@ -239,3 +269,4 @@ if ($failCount -eq 0) {
 } else {
     Write-Host "=== ISSUES DETECTED (run repair.ps1 to fix) ===" -ForegroundColor Red
 }
+

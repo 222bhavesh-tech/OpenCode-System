@@ -1,6 +1,6 @@
 # Product Requirements Document — OpenCode-System
 
-**Version:** 0.3.0  
+**Version:** 0.4.0  
 **Status:** Active development  
 **Product:** OpenCode-System Autonomous Engineering Platform  
 **Owner:** Repository maintainer  
@@ -303,14 +303,20 @@ defines the state and invariants; adapters do work and return receipts.
 - CLI extended to 18 commands.
 - 91 verification checks passing.
 
-### M3 — OpenCode binding (next)
+### M3 — Agentic Core (Phase A) ✅ COMPLETE
 
-- Resolve deployed agent naming (`plan` versus `planner`) without overwriting
-  user customizations.
-- Add OpenCode commands that read/write control-plane state.
-- Replace presence-only verification with a runnable doctor/demo.
+- OpenCode Adapter — CLI-based task execution binding with agent/role mapping.
+- Decision Engine — 13 decision types for autonomous loop control.
+- Replanner — Dynamic DAG mutation (add/remove/split/merge/dep/priority/specialist).
+- Context Resolver — Minimal task-specific context assembly with conflict detection.
+- Agent Runtime — Worker lifecycle with ownership tracking and concurrent limits.
+- Parallel Scheduler — Concurrent independent task execution with batch scheduling.
+- Context Checkpoint — Session resilience via save/restore/apply/prune.
+- Failure Strategy — Category-based recovery strategy selection.
+- Autonomous Loop — Full 13-phase observe→complete orchestrator.
+- 44 new Phase A tests, 57 total tests all passing.
 
-### M4 — Verification adapters
+### M4 — Verification adapters (next)
 
 - Run test/build/lint/type/security adapters.
 - Add browser workflow/screenshot evidence for web projects.
@@ -375,7 +381,7 @@ non-trivial project can:
 
 ## 14. Current implementation status
 
-### Implemented and tested (v0.3.0)
+### Implemented and tested (v0.4.0)
 
 | Component | Status | Details |
 | --- | --- | --- |
@@ -388,24 +394,29 @@ non-trivial project can:
 | Hooks | ✅ Complete | Executable lifecycle hooks with 5 built-in hooks, priority ordering, one-shot support |
 | Visual Dev Loop | ✅ Complete | Autonomous build→inspect→fix cycle framework |
 | Harness Optimizer | ✅ Complete | Config analysis with 4 dimensions, scored report |
-| Tests | ✅ 13/13 pass | DAG, evidence gates, failure/retry, cycle detection, shell/file execution, scheduler, events |
+| **Decision Engine** | ✅ Complete | 13 decision types, history tracking, stall detection, checkpoint intervals |
+| **Replanner** | ✅ Complete | DAG mutation: add/remove/split/merge/dep/priority/specialist/criteria, cycle detection |
+| **Context Resolver** | ✅ Complete | Task-specific context assembly, file conflict detection, dependency/failure/evidence resolution |
+| **Agent Runtime** | ✅ Complete | Worker lifecycle (spawn/execute/cancel/timeout), ownership tracking, concurrent limits |
+| **Parallel Scheduler** | ✅ Complete | Batch parallel execution, conflict detection, runUntilComplete |
+| **Context Checkpoint** | ✅ Complete | Save/restore/apply/prune for session resilience |
+| **Failure Strategy** | ✅ Complete | Category-based matrix (RETRY/SWITCH/CHANGE/SPLIT/ESCALATE/ABORT) |
+| **Autonomous Loop** | ✅ Complete | 13-phase orchestrator: observe→understand→decide→plan→delegate→execute→evaluate→verify→critique→recover→persist→continue→complete |
+| Tests | ✅ 57/57 pass | 13 baseline + 44 Phase A: decision-engine, replanner, context-resolver, failure-strategy, checkpoint, agent-runtime, parallel-scheduler, autonomous-loop, full integration |
 | Verification | ✅ 91 checks | Runtime files, exports, CLI commands, agent-kit integration, documentation |
 
 ### Not yet implemented
 
 | Component | Priority | Depends on |
 | --- | --- | --- |
-| OpenCode command binding | High | M3 |
 | Browser adapter (Playwright MCP) | Medium | M4 |
 | GitHub adapter (gh CLI auth) | Medium | M6 |
 | Worktree isolation | Low | M5 |
-| Dashboard/status UI | Low | M3 |
-| Multi-agent parallel execution | Medium | M3 |
-| Context snapshot/retrieval | Medium | M3 |
+| Dashboard/status UI | Low | M4 |
 
 ## 15. File inventory
 
-### Runtime modules (9)
+### Runtime modules (18)
 
 | File | Lines | Purpose |
 | --- | --- | --- |
@@ -418,6 +429,15 @@ non-trivial project can:
 | `runtime/visual-dev-loop.mjs` | 151 | Visual dev loop framework |
 | `runtime/loop-operator.mjs` | 170 | Scheduler wrapper with recovery |
 | `runtime/harness-optimizer.mjs` | 220 | Config analysis and optimization |
+| `runtime/opencode-adapter.mjs` | ~300 | OpenCode CLI binding, agent/role mapping |
+| `runtime/decision-engine.mjs` | ~300 | 13-type decision engine, history, stall detection |
+| `runtime/replanner.mjs` | ~400 | DAG mutation: add/remove/split/merge/dep/priority |
+| `runtime/context-resolver.mjs` | ~250 | Task context assembly, conflict detection |
+| `runtime/agent-runtime.mjs` | ~250 | Worker lifecycle, ownership, concurrency |
+| `runtime/parallel-scheduler.mjs` | ~200 | Batch parallel execution |
+| `runtime/context-checkpoint.mjs` | ~200 | Session resilience: save/restore/apply/prune |
+| `runtime/failure-strategy.mjs` | ~300 | Category-based failure recovery strategy |
+| `runtime/autonomous-loop.mjs` | ~300 | 13-phase orchestrator |
 
 ### Agents (22)
 
@@ -456,4 +476,4 @@ non-trivial project can:
 | `plugins/manifest.json` | 1 | damage-control plugin |
 | `scripts/` | 5 | install, repair, backup, verify, update |
 | `docs/` | 4 | PRD, audit, gap matrix, control-plane contract |
-| `test/` | 1 | 13 unit tests |
+| `test/` | 2 | 57 unit tests (13 baseline + 44 Phase A) |

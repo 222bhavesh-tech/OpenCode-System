@@ -1999,3 +1999,124 @@ node runtime/cli.mjs vdl --url http://localhost:3000 --build "npm run dev" --max
 - ✅ Executable hooks — implemented
 - ✅ CLI extensions — implemented
 - ✅ AGENTS.md updated — done
+
+---
+
+## 59. PHASE A — AGENTIC CORE (IMPLEMENTED)
+
+The autonomous loop is no longer theoretical. Phase A delivers the working agentic core: observe→understand→decide→plan→delegate→execute→evaluate→verify→critique→recover→persist→continue→complete.
+
+### New Runtime Modules
+
+| File | Purpose |
+|------|---------|
+| `runtime/opencode-adapter.mjs` | OpenCodeAdapter — CLI-based task execution binding, agent/role mapping, skill selection, prompt construction |
+| `runtime/decision-engine.mjs` | DecisionEngine — inspects state and determines next action (EXECUTE_TASK, PARALLELIZE, WAIT, VERIFY, RETRY, CHANGE_STRATEGY, REPLAN, RECOVER, CHECKPOINT, ESCALATE, STOP, COMPLETE) |
+| `runtime/replanner.mjs` | Replanner — dynamic DAG mutation (add/remove/split/merge tasks, change deps/priority/specialist/criteria, create recovery tasks) with cycle detection |
+| `runtime/context-resolver.mjs` | ContextResolver — assembles minimal task-specific context (files, deps, failures, evidence, conventions, decisions) with conflict detection |
+| `runtime/agent-runtime.mjs` | AgentRuntime — agent lifecycle management (spawn, execute, cancel, timeout) with ownership tracking and concurrent limits |
+| `runtime/parallel-scheduler.mjs` | ParallelScheduler — executes multiple independent tasks concurrently with conflict detection and batch scheduling |
+| `runtime/context-checkpoint.mjs` | ContextCheckpoint — saves/restores execution context for session resilience (save, restore, apply, prune) |
+| `runtime/failure-strategy.mjs` | FailureStrategy — failure-aware strategy selection (RETRY, SWITCH_AGENT, CHANGE_APPROACH, SPLIT_TASK, ESCALATE, ABORT) with category-based matrix |
+| `runtime/autonomous-loop.mjs` | AutonomousLoop — main orchestrator that ties all modules into the full 13-phase loop |
+
+### Architecture
+
+```
+AUTONOMOUS LOOP (runtime/autonomous-loop.mjs)
+    │
+    ├── OBSERVE     — ControlPlane.load() reads current state
+    ├── UNDERSTAND  — ContextResolver assembles task-specific context
+    ├── DECIDE      — DecisionEngine determines next action
+    ├── PLAN        — Replanner mutates DAG if needed
+    ├── DELEGATE    — AgentRuntime spawns workers
+    ├── EXECUTE     — ParallelScheduler runs tasks concurrently
+    ├── EVALUATE    — Check evidence verdicts
+    ├── VERIFY      — Evidence gates pass/fail
+    ├── CRITIQUE    — Review results
+    ├── RECOVER     — FailureStrategy handles failures
+    ├── PERSIST     — ContextCheckpoint saves state
+    ├── CONTINUE    — Loop back to OBSERVE
+    └── COMPLETE    — All tasks done, all evidence passes
+
+Modules:
+    runtime/control-plane.mjs      — State machine (sole authority)
+    runtime/opencode-adapter.mjs   — OpenCode CLI binding
+    runtime/decision-engine.mjs    — Brain: next-action decisions
+    runtime/replanner.mjs          — DAG mutation
+    runtime/context-resolver.mjs   — Task context assembly
+    runtime/agent-runtime.mjs      — Worker lifecycle
+    runtime/parallel-scheduler.mjs — Concurrent execution
+    runtime/context-checkpoint.mjs — Session resilience
+    runtime/failure-strategy.mjs   — Failure recovery
+```
+
+### Decision Types
+
+| Decision | When | Action |
+|----------|------|--------|
+| EXECUTE_TASK | Task ready | Spawn worker, execute |
+| PARALLELIZE | Multiple independent tasks ready | Run concurrently |
+| WAIT | Tasks in progress | Monitor |
+| RETRY | Transient failure | Same agent, same approach |
+| CHANGE_STRATEGY | Repeated same failure | Different approach |
+| SWITCH_AGENT | Agent cannot solve | Different specialist |
+| SPLIT_TASK | Task too complex | Break into subtasks |
+| REPLAN | Assumptions invalid | Mutate DAG |
+| RECOVER | System needs recovery | Apply failure strategy |
+| CHECKPOINT | Periodic save | Persist state |
+| ESCALATE | Cannot proceed | Human intervention |
+| STOP | Budget exhausted | Halt loop |
+| COMPLETE | All done | Mission complete |
+
+### Failure Strategy Hierarchy
+
+| Category | Strategy Order |
+|----------|---------------|
+| CODE | RETRY → CHANGE_APPROACH → SWITCH_AGENT → SPLIT_TASK → ESCALATE |
+| TEST | RETRY → CHANGE_APPROACH → SWITCH_AGENT → ESCALATE |
+| DEPENDENCY | CHANGE_APPROACH → RETRY → ESCALATE |
+| NETWORK | RETRY → RETRY → ESCALATE |
+| TIMEOUT | RETRY → CHANGE_APPROACH → SWITCH_AGENT → ESCALATE |
+| SECURITY | ESCALATE → ABORT |
+
+### Tests
+
+- 44 new Phase A tests (decision-engine, replanner, context-resolver, failure-strategy, context-checkpoint, agent-runtime, parallel-scheduler, autonomous-loop, full integration)
+- 13 baseline tests retained (zero regressions)
+- **Total: 57 tests, all passing**
+
+### CLI Commands Added
+
+```bash
+# Autonomous loop — full observe→complete cycle
+node runtime/cli.mjs loop --project . --max 50
+
+# Optimizer — config analysis
+node runtime/cli.mjs optimize --project .
+
+# Memory — persistent storage
+node runtime/cli.mjs memory store --category decision --content "..."
+node runtime/cli.mjs memory search --query "..."
+
+# Hooks — lifecycle events
+node runtime/cli.mjs hooks install --project .
+node runtime/cli.mjs hooks run --event session:start
+
+# Visual Dev Loop — autonomous UI iteration
+node runtime/cli.mjs vdl --url http://localhost:3000 --build "npm run dev"
+```
+
+### Status
+
+- ✅ OpenCode Adapter — implemented
+- ✅ Decision Engine — implemented and tested (6 tests)
+- ✅ Replanner — implemented and tested (8 tests)
+- ✅ Context Resolver — implemented and tested (3 tests)
+- ✅ Agent Runtime — implemented and tested (5 tests)
+- ✅ Parallel Scheduler — implemented and tested (3 tests)
+- ✅ Context Checkpoint — implemented and tested (5 tests)
+- ✅ Failure Strategy — implemented and tested (4 tests)
+- ✅ Autonomous Loop — implemented and tested (5 tests)
+- ✅ Full integration test — passing (3-task pipeline)
+- ✅ Regression tests — zero regressions

@@ -188,18 +188,55 @@ async function main() {
       }
 
       // ── Diagnostics ──
-      case 'doctor': output = {
+      case 'doctor': {
+        const { AdaptiveLoop } = await import('./adaptive-loop.mjs');
+        const { StateSnapshot } = await import('./state-snapshot.mjs');
+        const { Dashboard } = await import('./dashboard.mjs');
+        output = {
         node: process.version,
         runtime: 'opencode-system-control-plane',
         stateDirectory: path.join(project, '.opencode-system'),
         initialized: (() => { try { plane.load(); return true; } catch { return false; } })(),
-        version: '0.3.0',
-        modules: ['control-plane', 'worker', 'scheduler', 'cli', 'memory', 'hooks', 'visual-dev-loop', 'loop-operator', 'harness-optimizer'],
+        version: '0.4.0',
+        modules: ['control-plane', 'worker', 'scheduler', 'cli', 'memory', 'hooks', 'visual-dev-loop', 'loop-operator', 'harness-optimizer', 'adaptive-loop', 'state-snapshot', 'dashboard', 'strategy-engine', 'experience-store', 'learning-engine', 'failure-predictor', 'task-decomposer', 'team-optimizer', 'agent-orchestrator', 'agent-evaluator', 'model-router', 'context-optimizer', 'adaptive-verification', 'experiment-engine', 'self-improvement', 'evaluation-system', 'mission-memory', 'cross-mission-knowledge', 'autonomy-governor', 'mission-economics', 'critical-path', 'stall-detector', 'oscillation-guard', 'quality-improver', 'telemetry'],
         commands: [
           'init', 'add-task', 'ready', 'start', 'evidence', 'complete', 'fail', 'checkpoint', 'status',
           'run', 'step', 'schedule', 'loop', 'optimize', 'memory', 'hooks', 'vdl', 'doctor',
+          'dashboard', 'snapshot',
         ],
-      }; break;
+      }; break; }
+
+      // ── Dashboard ──
+      case 'dashboard': {
+        const { Dashboard } = await import('./dashboard.mjs');
+        const dash = new Dashboard(project);
+        const format = readFlag('--format');
+        output = format === 'text' ? dash.toText() : dash.generate();
+        break;
+      }
+
+      // ── State Snapshots ──
+      case 'snapshot': {
+        const { StateSnapshot } = await import('./state-snapshot.mjs');
+        const snap = new StateSnapshot(project);
+        const sub = args[0];
+        switch (sub) {
+          case 'save': output = snap.save(readFlag('--label') || 'manual'); break;
+          case 'list': output = snap.list(); break;
+          case 'restore': output = snap.restore(args[1]); break;
+          case 'delete': output = snap.delete(args[1]); break;
+          default: output = {
+            usage: 'snapshot save|list|restore|delete [--project PATH]',
+            subcommands: {
+              save: 'snapshot save [--label <name>]',
+              list: 'snapshot list',
+              restore: 'snapshot restore <snapshotId>',
+              delete: 'snapshot delete <snapshotId>',
+            },
+          };
+        }
+        break;
+      }
 
       default: throw new ControlPlaneError('USAGE',
         'Usage: <command> [--project PATH]\n\n' +
@@ -209,6 +246,8 @@ async function main() {
         'Hooks:          hooks install|list|run --event <name>\n' +
         'Visual Dev:     vdl --url <URL> [--build <cmd>]\n' +
         'Optimization:   optimize\n' +
+        'Dashboard:      dashboard [--format text]\n' +
+        'Snapshots:      snapshot save|list|restore|delete\n' +
         'Diagnostics:    doctor'
       );
     }

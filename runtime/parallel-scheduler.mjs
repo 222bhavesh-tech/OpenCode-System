@@ -444,49 +444,38 @@ class ParallelScheduler extends EventEmitter {
 
     for (const task of toExecute) {
       const role = this.matchTaskToRole(task.requiredCapabilities || []) || task.specialist || AGENT_CAPABILITY.BUILDER;
-      const ext = this.startWorker(task.id, role, {
+      const { workerId } = this.startWorker(task.id, role, {
         timeout: this._getTimeout(task),
         ownedFiles: this._getTaskFiles(task),
       });
 
-      const promise = this.runtime.execute(ext.workerId).then((result) => {
+      // Mark scheduler-level worker as RUNNING
+      const ext = this._workerStates.get(workerId);
+      ext.status = SCHEDULER_WORKER_STATUS.RUNNING;
+
+      const promise = this.runtime.execute(workerId).then((result) => {
+        // Update scheduler-level worker status
+        ext.status = result.success ? SCHEDULER_WORKER_STATUS.COMPLETED : SCHEDULER_WORKER_STATUS.FAILED;
         results.push(result);
 
-        // Record evidence in ControlPlane
-        if (result.success && result.receipt?.evidence) {
-          for (const ev of result.receipt.evidence) {
-            this.plane.recordEvidence(task.id, ev);
-          }
-        }
-
-        // Record failure
-        if (!result.success) {
-          this.plane.recordFailure(task.id, {
-            category: result.receipt?.category || 'UNKNOWN',
-            cause: result.error || 'Execution failed',
-            attemptedFixes: [],
-            prevention: '',
-          });
-        }
-
         // Release file ownership on completion
-        const extState = this._workerStates.get(ext.workerId);
-        if (extState) {
-          for (const file of extState.ownedFiles) {
-            this._releaseFile(ext.workerId, file);
+        if (ext) {
+          for (const file of ext.ownedFiles) {
+            this._releaseFile(workerId, file);
           }
         }
 
         return result;
       }).catch((error) => {
+        // Update scheduler-level worker status
+        ext.status = SCHEDULER_WORKER_STATUS.FAILED;
         // Release files on error too
-        const extState = this._workerStates.get(ext.workerId);
-        if (extState) {
-          for (const file of extState.ownedFiles) {
-            this._releaseFile(ext.workerId, file);
+        if (ext) {
+          for (const file of ext.ownedFiles) {
+            this._releaseFile(workerId, file);
           }
         }
-        return { workerId: ext.workerId, taskId: task.id, success: false, error: error.message };
+        return { workerId, taskId: task.id, success: false, error: error.message };
       });
 
       promises.push(promise);

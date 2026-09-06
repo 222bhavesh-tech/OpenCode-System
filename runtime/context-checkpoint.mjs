@@ -21,6 +21,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
 
 export class ContextCheckpoint {
   /**
@@ -45,7 +46,7 @@ export class ContextCheckpoint {
    */
   save(extra = {}) {
     const state = this.plane.load();
-    const id = `cp-${Date.now().toString(36)}`;
+    const id = `cp-${Date.now().toString(36)}-${crypto.randomUUID().slice(0, 6)}`;
     const timestamp = new Date().toISOString();
 
     const checkpoint = {

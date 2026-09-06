@@ -49,6 +49,7 @@ describe('CHAOS: StrategyEngine lifecycle stress', () => {
 describe('CHAOS: ExperienceStore concurrent access', () => {
   it('should handle rapid record/query cycles', () => {
     const store = new ExperienceStore('C:/Users/bhavesh jeengar/OpenCode-System');
+    store.clear();
     for (let i = 0; i < 50; i++) {
       store.record({ taskType: 'FEATURE', outcome: i % 2 === 0 ? 'SUCCESS' : 'FAILURE', strategy: 'DIRECT', duration: 1000 + i });
       store.getOutcomes({ taskType: 'FEATURE' });
@@ -60,6 +61,7 @@ describe('CHAOS: ExperienceStore concurrent access', () => {
 
   it('should handle empty queries', () => {
     const store = new ExperienceStore('C:/Users/bhavesh jeengar/OpenCode-System');
+    store.clear();
     const results = store.getOutcomes({ taskType: 'NONEXISTENT' });
     assert.equal(results.length, 0);
     store.clear();
@@ -69,6 +71,7 @@ describe('CHAOS: ExperienceStore concurrent access', () => {
 describe('CHAOS: LearningEngine with no data', () => {
   it('should produce no recommendations with empty store', () => {
     const store = new ExperienceStore('C:/Users/bhavesh jeengar/OpenCode-System');
+    store.clear();
     const engine = new LearningEngine(store);
     const recs = engine.analyze();
     assert.equal(recs.length, 0);

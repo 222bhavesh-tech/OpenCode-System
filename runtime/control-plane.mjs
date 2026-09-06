@@ -21,6 +21,8 @@ export class ControlPlane {
     this.dir = path.join(this.projectRoot, '.opencode-system');
     this.stateFile = path.join(this.dir, 'state.json');
     this.maxRetries = options.maxRetries ?? 3;
+    this._cache = null;
+    this._cacheTime = 0;
   }
 
   initialize({ goal, mode = 'ASSISTED', budgets = {} }) {
@@ -38,9 +40,11 @@ export class ControlPlane {
   }
 
   load() {
+    if (this._cache) return this._cache;
     if (!fs.existsSync(this.stateFile)) throw new ControlPlaneError('NOT_INITIALIZED', `No project state at ${this.stateFile}; run init first.`);
     const state = JSON.parse(fs.readFileSync(this.stateFile, 'utf8'));
     this._validate(state);
+    this._cache = state;
     return state;
   }
 
@@ -133,7 +137,7 @@ export class ControlPlane {
 
   _task(state, taskId) { const task = state.tasks[taskId]; if (!task) throw new ControlPlaneError('UNKNOWN_TASK', `Unknown task ${taskId}.`); return task; }
   _event(state, type, data) { state.events.push({ id: id('event'), at: now(), type, data }); }
-  _save(state) { state.updatedAt = now(); this._write(state); }
+  _save(state) { state.updatedAt = now(); this._cache = state; this._write(state); }
   _write(state) { const temp = `${this.stateFile}.tmp`; fs.writeFileSync(temp, `${JSON.stringify(state, null, 2)}\n`); fs.renameSync(temp, this.stateFile); }
   _ensureAcyclic(state) { const visiting = new Set(); const visited = new Set(); const visit = (taskId) => { if (visiting.has(taskId)) throw new ControlPlaneError('TASK_CYCLE', `Task graph contains a cycle at ${taskId}.`); if (visited.has(taskId)) return; visiting.add(taskId); for (const dep of state.tasks[taskId].dependencies) visit(dep); visiting.delete(taskId); visited.add(taskId); }; Object.keys(state.tasks).forEach(visit); }
   _validate(state) { if (state.version !== 1 || !state.tasks || !Array.isArray(state.events)) throw new ControlPlaneError('INVALID_STATE', 'Unsupported or corrupt control-plane state.'); this._ensureAcyclic(state); }

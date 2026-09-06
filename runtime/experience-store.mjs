@@ -11,6 +11,7 @@ class ExperienceStore extends EventEmitter {
     this.dir = path.join(this.projectRoot, '.opencode-system');
     this.storeFile = path.join(this.dir, 'experience-store.json');
     this.maxEntries = options.maxEntries || 1000;
+    this._dirExists = fs.existsSync(this.dir);
     this.entries = this._load();
   }
 
@@ -102,8 +103,11 @@ class ExperienceStore extends EventEmitter {
   }
 
   _save() {
-    fs.mkdirSync(this.dir, { recursive: true });
-    fs.writeFileSync(this.storeFile, JSON.stringify(this.entries, null, 2));
+    if (!this._dirExists) {
+      fs.mkdirSync(this.dir, { recursive: true });
+      this._dirExists = true;
+    }
+    fs.writeFileSync(this.storeFile, JSON.stringify(this.entries));
   }
 }
 

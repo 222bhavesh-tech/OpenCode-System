@@ -57,3 +57,13 @@ tmp/
 temp/
 *.tmp
 *.temp
+
+# Test project artifacts (created by test suites)
+test-benchmark-project/
+test-failure-project/
+test-project-d/
+test-resume-project/
+
+# Runtime state (created during test execution)
+.opencode-system/
+.opencode/checkpoints/

@@ -42,7 +42,12 @@ export class ControlPlane {
   load() {
     if (this._cache) return this._cache;
     if (!fs.existsSync(this.stateFile)) throw new ControlPlaneError('NOT_INITIALIZED', `No project state at ${this.stateFile}; run init first.`);
-    const state = JSON.parse(fs.readFileSync(this.stateFile, 'utf8'));
+    let state;
+    try {
+      state = JSON.parse(fs.readFileSync(this.stateFile, 'utf8'));
+    } catch (e) {
+      throw new ControlPlaneError('CORRUPT_STATE', `State file is corrupt or unreadable: ${e.message}`);
+    }
     this._validate(state);
     this._cache = state;
     return state;

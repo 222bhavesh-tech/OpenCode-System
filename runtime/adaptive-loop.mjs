@@ -11,6 +11,7 @@ import { ContextOptimizer } from './context-optimizer.mjs';
 import { AdaptiveVerification } from './adaptive-verification.mjs';
 import { ExperienceStore } from './experience-store.mjs';
 import { MissionMemory } from './mission-memory.mjs';
+import { WorkerAdapter } from './worker.mjs';
 
 const LOOP_STATE = Object.freeze({
   IDLE: 'IDLE',
@@ -27,13 +28,18 @@ class AdaptiveLoop extends EventEmitter {
     this.plane = plane;
     this.maxIterations = options.maxIterations || 50;
     this.maxConcurrent = options.maxConcurrent || 3;
-    this.defaultTimeout = options.defaultTimeout || 300000;
+    this.defaultTimeout = options.taskTimeoutMs || options.defaultTimeout || 300000;
+    this.maxRetriesPerTask = options.maxRetriesPerTask || 3;
+    this.maxFailures = options.maxFailures || 10;
     this.state = LOOP_STATE.IDLE;
     this.iteration = 0;
     this.results = [];
+    this.succeeded = 0;
+    this.failed = 0;
+    this.projectRoot = options.projectRoot || plane.projectRoot;
 
     // Phase C modules
-    this.experienceStore = new ExperienceStore(plane.projectRoot);
+    this.experienceStore = new ExperienceStore(this.projectRoot);
     this.strategyEngine = new StrategyEngine(this.experienceStore);
     this.failurePredictor = new FailurePredictor(this.experienceStore);
     this.taskDecomposer = new TaskDecomposer();
@@ -44,7 +50,8 @@ class AdaptiveLoop extends EventEmitter {
     this.governor = new AutonomyGovernor(this.experienceStore);
     this.contextOptimizer = new ContextOptimizer(this.experienceStore);
     this.verification = new AdaptiveVerification();
-    this.memory = new MissionMemory(plane.projectRoot);
+    this.memory = new MissionMemory(this.projectRoot);
+    this.worker = new WorkerAdapter(plane, { timeout: this.defaultTimeout });
   }
 
   /**
@@ -181,17 +188,34 @@ class AdaptiveLoop extends EventEmitter {
       return { phase: 'APPROVAL_REQUIRED', taskId: task.id, action: govCheck.action };
     }
 
-    // Record telemetry
-    this.telemetry.incrementCounter('loop:tasks_started');
+    // Track stall detection for this task
     this.stallDetector.trackTask(task.id, { status: 'STARTED', progress: true });
+    this.telemetry.incrementCounter('loop:tasks_started');
 
-    return {
-      phase: 'TASK_READY',
-      taskId: task.id,
-      strategy: strategy.selectedStrategy,
-      score: strategy.score,
-      risks: this.failurePredictor.predict(task, {}).risks.length,
-    };
+    // Start the task in ControlPlane
+    this.plane.startTask(task.id);
+
+    // Execute via worker
+    try {
+      const result = await this.worker.execute(task.id);
+      if (result.success) {
+        this.succeeded++;
+        this.telemetry.incrementCounter('loop:tasks_succeeded');
+        this.emit('loop:task-done', { taskId: task.id, duration: result.duration });
+        this.experienceStore.record({ taskId: task.id, outcome: 'SUCCESS', strategy: strategy.selectedStrategy, duration: result.duration });
+      } else {
+        this.failed++;
+        this.telemetry.incrementCounter('loop:tasks_failed');
+        this.emit('loop:task-fail', { taskId: task.id, reason: result.category, strategy: strategy.selectedStrategy });
+        this.experienceStore.record({ taskId: task.id, outcome: 'FAILURE', strategy: strategy.selectedStrategy, reason: result.category });
+      }
+      return { phase: 'EXECUTED', taskId: task.id, success: result.success, category: result.category, strategy: strategy.selectedStrategy };
+    } catch (error) {
+      this.failed++;
+      this.telemetry.incrementCounter('loop:tasks_failed');
+      this.emit('loop:task-fail', { taskId: task.id, reason: error.message, strategy: strategy.selectedStrategy });
+      return { phase: 'EXECUTION_ERROR', taskId: task.id, error: error.message, strategy: strategy.selectedStrategy };
+    }
   }
 
   /**

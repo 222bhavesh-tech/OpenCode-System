@@ -7,7 +7,7 @@ const project = path.resolve(readFlag('--project') || process.cwd());
 const plane = new ControlPlane(project);
 
 // ─── Async commands (require await) ──────────────────────────────────
-const ASYNC_COMMANDS = new Set(['run', 'step', 'schedule', 'loop', 'optimize']);
+const ASYNC_COMMANDS = new Set(['run', 'step', 'schedule', 'loop', 'optimize', 'adaptive']);
 
 async function main() {
   try {
@@ -83,6 +83,27 @@ async function main() {
         const { HarnessOptimizer } = await import('./harness-optimizer.mjs');
         const optimizer = new HarnessOptimizer(project);
         output = await optimizer.analyze();
+        break;
+      }
+
+      // ── Adaptive Loop (Phase C intelligence integration) ──
+      case 'adaptive': {
+        const { AdaptiveLoop } = await import('./adaptive-loop.mjs');
+        const loop = new AdaptiveLoop(plane, {
+          maxIterations: Number(readFlag('--max', '100')),
+          taskTimeoutMs: Number(readFlag('--timeout', '300000')),
+          maxRetriesPerTask: Number(readFlag('--retries', '3')),
+          maxFailures: Number(readFlag('--max-failures', '10')),
+          projectRoot: project,
+        });
+        loop.on('loop:start', (e) => console.error(`[adaptive] start: goal=${e.goal}`));
+        loop.on('loop:iteration', (e) => console.error(`[adaptive] iteration ${e.iteration}: strategy=${e.strategy || 'default'} decision=${e.decision}`));
+        loop.on('loop:task-done', (e) => console.error(`[adaptive] done: ${e.taskId} (${e.duration}ms)`));
+        loop.on('loop:task-fail', (e) => console.error(`[adaptive] fail: ${e.taskId} reason=${e.reason} strategy=${e.strategy}`));
+        loop.on('loop:recovery', (e) => console.error(`[adaptive] recovery: ${e.strategy} on ${e.taskId}`));
+        loop.on('loop:checkpoint', (e) => console.error(`[adaptive] checkpoint: iteration ${e.iteration}`));
+        loop.on('loop:complete', (e) => console.error(`[adaptive] complete: ${e.iterations} iterations, succeeded=${e.succeeded}, failed=${e.failed}`));
+        output = await loop.run();
         break;
       }
 
@@ -201,7 +222,7 @@ async function main() {
         modules: ['control-plane', 'worker', 'scheduler', 'cli', 'memory', 'hooks', 'visual-dev-loop', 'loop-operator', 'harness-optimizer', 'adaptive-loop', 'state-snapshot', 'dashboard', 'strategy-engine', 'experience-store', 'learning-engine', 'failure-predictor', 'task-decomposer', 'team-optimizer', 'agent-orchestrator', 'agent-evaluator', 'model-router', 'context-optimizer', 'adaptive-verification', 'experiment-engine', 'self-improvement', 'evaluation-system', 'mission-memory', 'cross-mission-knowledge', 'autonomy-governor', 'mission-economics', 'critical-path', 'stall-detector', 'oscillation-guard', 'quality-improver', 'telemetry'],
         commands: [
           'init', 'add-task', 'ready', 'start', 'evidence', 'complete', 'fail', 'checkpoint', 'status',
-          'run', 'step', 'schedule', 'loop', 'optimize', 'memory', 'hooks', 'vdl', 'doctor',
+          'run', 'step', 'schedule', 'loop', 'adaptive', 'optimize', 'memory', 'hooks', 'vdl', 'doctor',
           'dashboard', 'snapshot',
         ],
       }; break; }
@@ -241,7 +262,7 @@ async function main() {
       default: throw new ControlPlaneError('USAGE',
         'Usage: <command> [--project PATH]\n\n' +
         'State:          init, add-task, ready, start, evidence, complete, fail, checkpoint, status\n' +
-        'Execution:      run <taskId>, step, schedule [--max N], loop [--max N]\n' +
+        'Execution:      run <taskId>, step, schedule [--max N], loop [--max N], adaptive [--max N]\n' +
         'Memory:         memory store|search|recent|stats|markdown|clear\n' +
         'Hooks:          hooks install|list|run --event <name>\n' +
         'Visual Dev:     vdl --url <URL> [--build <cmd>]\n' +
